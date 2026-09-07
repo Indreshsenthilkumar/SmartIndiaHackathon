@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Compass, Menu, X, ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
+import { Compass, Menu, X, ArrowRight, Sparkles, ChevronDown, Target } from 'lucide-react';
 
 export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, currentRole }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -57,12 +57,19 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+        <nav className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           <button 
             onClick={() => handleNav('/opportunities')}
             className={`nav-link ${currentRoute === '/opportunities' ? 'active' : ''}`}
           >
             Opportunities
+          </button>
+
+          <button 
+            onClick={() => handleNav('/challenges')}
+            className={`nav-link ${currentRoute === '/challenges' ? 'active' : ''}`}
+          >
+            Industry Challenges
           </button>
 
           <button 
@@ -186,6 +193,13 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
             Explore Opportunities
           </button>
           <button 
+            onClick={() => handleNav('/challenges')}
+            className={`nav-link ${currentRoute === '/challenges' ? 'active' : ''}`}
+            style={{ width: '100%', justifyContent: 'flex-start', padding: '0.65rem 0.85rem' }}
+          >
+            Industry Challenges
+          </button>
+          <button 
             onClick={() => handleNav('/skills')}
             className={`nav-link ${currentRoute === '/skills' ? 'active' : ''}`}
             style={{ width: '100%', justifyContent: 'flex-start', padding: '0.65rem 0.85rem' }}
@@ -220,30 +234,8 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
           >
             About ALIGN
           </button>
-
-          <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem', marginTop: '0.5rem' }}>
-            <button
-              onClick={() => { setMobileMenuOpen(false); onOpenRoleModal(); }}
-              className="btn btn-primary"
-              style={{ width: '100%' }}
-            >
-              Select Persona & Enter Demo
-            </button>
-          </div>
         </div>
       )}
-
-      {/* Responsive stylesheet override */}
-      <style>{`
-        @media (max-width: 900px) {
-          .desktop-nav {
-            display: none !important;
-          }
-          .mobile-toggle {
-            display: block !important;
-          }
-        }
-      `}</style>
     </header>
   );
 }

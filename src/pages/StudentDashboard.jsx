@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { User, Award, CheckSquare, FileText, Compass, ArrowRight, CheckCircle2, Clock, Sparkles, PlusCircle, ExternalLink, ShieldCheck, PlayCircle } from 'lucide-react';
+import { User, Award, CheckSquare, FileText, Compass, ArrowRight, CheckCircle2, Clock, Sparkles, PlusCircle, ExternalLink, ShieldCheck, PlayCircle, Code2, Cpu, Target } from 'lucide-react';
 import OpportunityCard from '../components/OpportunityCard';
 import MatchModal from '../components/MatchModal';
 import MobileBottomNav from '../components/MobileBottomNav';
+import ProjectVerificationModal from '../components/ProjectVerificationModal';
+import ChallengeSubmissionModal from '../components/ChallengeSubmissionModal';
 
-export default function StudentDashboard({ student, opportunities, assessmentQuestions, onUpdateStudent, onOpenMatchModal, onNavigate }) {
-  const [activeTab, setActiveTab] = useState('overview'); // overview, profile, gaps, applications, portfolio, assessment
+export default function StudentDashboard({ student, opportunities, challenges, assessmentQuestions, onUpdateStudent, onOpenMatchModal, onNavigate }) {
+  const [activeTab, setActiveTab] = useState('overview'); // overview, profile, twin, gaps, applications, portfolio, challenges, assessment
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizCompleted, setQuizCompleted] = useState(false);
-  const [appFilter, setAppFilter] = useState('All');
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [selectedChallengeForSub, setSelectedChallengeForSub] = useState(null);
 
   // Handle Assessment Answer Selection
   const handleSelectAnswer = (questionId, option) => {
@@ -20,12 +23,15 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
     if (quizIndex < assessmentQuestions.length - 1) {
       setQuizIndex(quizIndex + 1);
     } else {
-      // Calculate assessment result
       setQuizCompleted(true);
-      // Simulate profile update
       const updatedStudent = {
         ...student,
         overallReadiness: Math.min(100, student.overallReadiness + 4),
+        competencyTwin: {
+          ...student.competencyTwin,
+          knowledgeScore: Math.min(100, student.competencyTwin.knowledgeScore + 4),
+          overallScore: Math.round((student.competencyTwin.knowledgeScore + 4 + student.competencyTwin.buildScore) / 2)
+        },
         assessedSkillsCount: student.assessedSkillsCount + 1
       };
       onUpdateStudent(updatedStudent);
@@ -36,6 +42,32 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
     setQuizIndex(0);
     setQuizAnswers({});
     setQuizCompleted(false);
+  };
+
+  // Handle Project Static Analysis Complete (Feature 1)
+  const handleVerifyProjectComplete = (verifiedProject) => {
+    const updatedProjects = [verifiedProject, ...(student.analyzedProjects || [])];
+    const updatedStudent = {
+      ...student,
+      analyzedProjects: updatedProjects,
+      competencyTwin: {
+        ...student.competencyTwin,
+        buildScore: Math.min(100, student.competencyTwin.buildScore + 3),
+        overallScore: Math.round((student.competencyTwin.knowledgeScore + student.competencyTwin.buildScore + 3) / 2),
+        analyzedReposCount: updatedProjects.length
+      }
+    };
+    onUpdateStudent(updatedStudent);
+  };
+
+  // Handle Challenge Submission Complete (Feature 2)
+  const handleChallengeSubmitted = (submission) => {
+    const updatedSubmissions = [submission, ...(student.studentSubmissions || [])];
+    const updatedStudent = {
+      ...student,
+      studentSubmissions: updatedSubmissions
+    };
+    onUpdateStudent(updatedStudent);
   };
 
   return (
@@ -54,44 +86,54 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
                 Good morning, {student.name}
               </h1>
               <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-                {student.degree} ({student.gradYear}) · Target Career: <strong>{student.targetCareer}</strong>
+                Roll No: <strong>{student.rollNumber || '2026-IT-101'}</strong> · {student.degree} ({student.gradYear})
               </div>
             </div>
 
-            {/* Overall Readiness Gauge */}
-            <div style={{
-              backgroundColor: 'var(--accent-light)',
-              border: '1px solid var(--accent-border)',
-              padding: '0.75rem 1.25rem',
-              borderRadius: 'var(--radius-md)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem'
-            }}>
-              <div>
-                <div style={{ fontSize: '0.72rem', fontWeight: 700, uppercase: true, color: 'var(--accent-primary)' }}>
-                  OVERALL READINESS
-                </div>
-                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', lineHeight: 1 }}>
-                  {student.overallReadiness}%
-                </div>
-              </div>
+            {/* Feature 1: Competency Twin Header Gauge */}
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
               <div style={{
-                width: '45px',
-                height: '45px',
-                borderRadius: '50%',
-                background: `conic-gradient(#2563EB ${student.overallReadiness * 3.6}deg, #CBD5E1 0deg)`,
+                backgroundColor: '#F0FDF4',
+                border: '1px solid #99F6E4',
+                padding: '0.65rem 1.1rem',
+                borderRadius: 'var(--radius-md)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                padding: '4px'
+                gap: '0.75rem'
               }}>
-                <div style={{ width: '100%', height: '100%', borderRadius: '50%', backgroundColor: '#FFFFFF' }}></div>
+                <div>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 700, uppercase: true, color: '#0D9488' }}>
+                    COMPETENCY TWIN
+                  </div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', lineHeight: 1 }}>
+                    {student.competencyTwin ? student.competencyTwin.overallScore : 75}%
+                  </div>
+                </div>
+                <Cpu size={28} color="#0D9488" />
+              </div>
+
+              <div style={{
+                backgroundColor: 'var(--accent-light)',
+                border: '1px solid var(--accent-border)',
+                padding: '0.65rem 1.1rem',
+                borderRadius: 'var(--radius-md)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem'
+              }}>
+                <div>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 700, uppercase: true, color: 'var(--accent-primary)' }}>
+                    OVERALL READINESS
+                  </div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', lineHeight: 1 }}>
+                    {student.overallReadiness}%
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Nav Tabs */}
+          {/* Navigation Tabs */}
           <div style={{
             display: 'flex',
             gap: '0.5rem',
@@ -101,8 +143,10 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
           }}>
             {[
               { id: 'overview', label: 'Overview', icon: Compass },
+              { id: 'twin', label: 'Competency Twin & GitHub', icon: Cpu },
               { id: 'profile', label: 'Skill Profile', icon: Award },
               { id: 'gaps', label: 'Skill Gaps', icon: CheckSquare },
+              { id: 'challenges', label: 'Industry Challenges', icon: Target },
               { id: 'applications', label: `Applications (${student.applications.length})`, icon: FileText },
               { id: 'portfolio', label: 'Digital Portfolio', icon: User },
               { id: 'assessment', label: 'Take Assessment', icon: PlayCircle }
@@ -149,22 +193,22 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
               gap: '1.25rem'
             }}>
               <div className="card" style={{ padding: '1.25rem' }}>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>CAREER READINESS</div>
-                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent-primary)', marginTop: '0.2rem' }}>
-                  {student.overallReadiness}%
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>COMPETENCY TWIN SCORE</div>
+                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0D9488', marginTop: '0.2rem' }}>
+                  {student.competencyTwin ? student.competencyTwin.overallScore : 75}%
                 </div>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
-                  Target: Product Analyst
+                  Knowledge (72%) + Build (78%)
                 </div>
               </div>
 
               <div className="card" style={{ padding: '1.25rem' }}>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>SKILLS ASSESSED</div>
-                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.2rem' }}>
-                  {student.assessedSkillsCount}
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>ANALYZED REPOSITORIES</div>
+                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent-primary)', marginTop: '0.2rem' }}>
+                  {student.competencyTwin ? student.competencyTwin.analyzedReposCount : 2}
                 </div>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
-                  Across Tech & Soft Skills
+                  Code Complexity Verified
                 </div>
               </div>
 
@@ -189,11 +233,11 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
               </div>
             </div>
 
-            {/* Next Best Action Banner */}
+            {/* Feature 1 Callout Banner */}
             <div className="card" style={{
               padding: '1.5rem',
-              backgroundColor: 'var(--accent-light)',
-              border: '1px solid var(--accent-border)',
+              backgroundColor: '#F0FDF4',
+              border: '1px solid #99F6E4',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -201,23 +245,22 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
               flexWrap: 'wrap'
             }}>
               <div>
-                <span className="badge badge-blue" style={{ marginBottom: '0.4rem' }}>
-                  RECOMMENDED NEXT ACTION
+                <span className="badge badge-teal" style={{ marginBottom: '0.4rem' }}>
+                  FEATURE 1 · PROJECT-BASED SKILL VERIFICATION
                 </span>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                  {student.nextBestAction.title}
+                  Build your Competency Twin by analyzing your GitHub projects & code repositories.
                 </h3>
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                  {student.nextBestAction.description}
+                  Combines what you know with what you can actually build for accurate industry matching.
                 </p>
               </div>
 
               <button
-                onClick={() => setActiveTab('gaps')}
+                onClick={() => setShowProjectModal(true)}
                 className="btn btn-primary btn-sm"
               >
-                Execute Action
-                <ArrowRight size={14} />
+                + Analyze GitHub Project
               </button>
             </div>
 
@@ -250,7 +293,153 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
           </div>
         )}
 
-        {/* Tab 2: Skill Profile */}
+        {/* Feature 1 Tab: Competency Twin & GitHub Analysis */}
+        {activeTab === 'twin' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <div className="eyebrow">NOVELTY FEATURE 1</div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                  Competency Twin & Project Verification
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                  Evaluates both what you know (benchmarks) and what you can build (static code analysis of your GitHub repositories).
+                </p>
+              </div>
+
+              <button onClick={() => setShowProjectModal(true)} className="btn btn-primary btn-sm">
+                + Analyze New GitHub Repo
+              </button>
+            </div>
+
+            {/* Dual Gauge Box */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '1.25rem'
+            }}>
+              <div className="card" style={{ padding: '1.5rem', borderLeft: '4px solid var(--accent-primary)' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', uppercase: true }}>
+                  1. WHAT YOU KNOW (KNOWLEDGE BENCHMARK)
+                </div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-primary)', margin: '0.2rem 0' }}>
+                  {student.competencyTwin ? student.competencyTwin.knowledgeScore : 72}%
+                </div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                  Based on {student.assessedSkillsCount} assessed benchmark skill topics.
+                </div>
+              </div>
+
+              <div className="card" style={{ padding: '1.5rem', borderLeft: '4px solid #0D9488' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', uppercase: true }}>
+                  2. WHAT YOU CAN BUILD (PRACTICAL CODE SCORE)
+                </div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0D9488', margin: '0.2rem 0' }}>
+                  {student.competencyTwin ? student.competencyTwin.buildScore : 78}%
+                </div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                  Based on {student.competencyTwin ? student.competencyTwin.analyzedReposCount : 2} verified GitHub repositories & code complexity metrics.
+                </div>
+              </div>
+            </div>
+
+            {/* Analyzed Projects List */}
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
+                Analyzed & Verified Repositories
+              </h3>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {(student.analyzedProjects || []).map((proj) => (
+                  <div key={proj.id} style={{
+                    backgroundColor: 'var(--bg-subtle)',
+                    padding: '1.15rem',
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid var(--border-subtle)'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <Code2 size={16} />
+                          <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>{proj.title}</h4>
+                        </div>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: '0.15rem' }}>
+                          Repo: <code style={{ color: 'var(--accent-primary)' }}>{proj.repoUrl}</code>
+                        </div>
+                      </div>
+
+                      <span className="badge badge-teal">Verified ({proj.complexityScore}/100 Complexity)</span>
+                    </div>
+
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.85rem' }}>
+                      Composition: <strong>{proj.languageComposition}</strong> · Practical Contribution: <strong>{proj.practicalContribution}</strong>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+                      {proj.verifiedSkills.map((sk, idx) => (
+                        <span key={idx} className="badge badge-teal">✓ {sk}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Feature 2 Tab: Industry Challenges */}
+        {activeTab === 'challenges' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <div className="eyebrow">NOVELTY FEATURE 2</div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>Industry Challenge Engine</h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Solve real-world problem statements published by industry partners to prove your skills.</p>
+              </div>
+
+              <button onClick={() => onNavigate('/challenges')} className="btn btn-secondary btn-sm">
+                View All Public Challenges
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+              {challenges.map((chal) => {
+                const isSubmitted = (student.studentSubmissions || []).some(s => s.challengeId === chal.id);
+
+                return (
+                  <div key={chal.id} className="card" style={{ padding: '1.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                      <span className="badge badge-blue">{chal.domain}</span>
+                      <span className="badge badge-gray">{chal.difficulty}</span>
+                    </div>
+
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', margin: '0.35rem 0' }}>
+                      {chal.title}
+                    </h3>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--accent-primary)', fontWeight: 600, marginBottom: '0.75rem' }}>
+                      Partner: {chal.industryPartner}
+                    </div>
+
+                    <div style={{ backgroundColor: 'var(--accent-light)', padding: '0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem', color: 'var(--text-main)', marginBottom: '1rem' }}>
+                      Reward: {chal.stipendOrReward}
+                    </div>
+
+                    <button
+                      onClick={() => setSelectedChallengeForSub(chal)}
+                      className="btn btn-primary btn-sm"
+                      style={{ width: '100%' }}
+                      disabled={isSubmitted}
+                    >
+                      {isSubmitted ? '✓ Solution Submitted' : 'Submit Challenge Solution'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Tab: Skill Profile */}
         {activeTab === 'profile' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -298,41 +487,10 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
                 ))}
               </div>
             </div>
-
-            {/* Professional Competencies */}
-            <div className="card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
-                Professional Competencies
-              </h3>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
-                {student.skills.filter(s => s.category === 'Professional').map((s) => (
-                  <div key={s.id} style={{
-                    backgroundColor: 'var(--bg-main)',
-                    padding: '0.85rem 1rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-subtle)',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
-                    <div>
-                      <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '0.9rem' }}>{s.name}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.1rem' }}>
-                        Evidence: {s.evidence}
-                      </div>
-                    </div>
-                    <span className="badge badge-teal">
-                      {s.proficiency}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         )}
 
-        {/* Tab 3: Skill Gaps */}
+        {/* Tab: Skill Gaps */}
         {activeTab === 'gaps' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
@@ -385,7 +543,7 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
           </div>
         )}
 
-        {/* Tab 4: Applications Tracker */}
+        {/* Tab: Applications */}
         {activeTab === 'applications' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
@@ -420,40 +578,13 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
                       </div>
                     </div>
                   </div>
-
-                  {/* Stage Timeline */}
-                  <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem', marginTop: '0.5rem' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', uppercase: true, marginBottom: '0.75rem' }}>
-                      SELECTION TIMELINE PROGRESSION
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      {app.timeline.map((stage, idx) => (
-                        <div key={idx} style={{
-                          flex: 1,
-                          minWidth: '100px',
-                          backgroundColor: stage.completed ? 'var(--accent-light)' : 'var(--bg-subtle)',
-                          border: stage.completed ? '1px solid var(--accent-border)' : '1px solid var(--border-subtle)',
-                          padding: '0.5rem 0.65rem',
-                          borderRadius: 'var(--radius-sm)',
-                          fontSize: '0.75rem'
-                        }}>
-                          <div style={{ fontWeight: 700, color: stage.completed ? 'var(--accent-primary)' : 'var(--text-light)' }}>
-                            {stage.completed ? '✓ ' : '• '}{stage.stage}
-                          </div>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
-                            {stage.date}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* Tab 5: Portfolio */}
+        {/* Tab: Portfolio */}
         {activeTab === 'portfolio' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div className="card" style={{ padding: '1.75rem' }}>
@@ -471,66 +602,10 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
                 {student.portfolio.about}
               </p>
             </div>
-
-            {/* Evidence-Backed Projects */}
-            <div className="card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
-                Evidence-Backed Projects
-              </h3>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {student.portfolio.projects.map((p) => (
-                  <div key={p.id} style={{
-                    backgroundColor: 'var(--bg-subtle)',
-                    padding: '1rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-subtle)'
-                  }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>{p.title}</h4>
-                      <span className="badge badge-teal">Verified Evidence</span>
-                    </div>
-                    <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', margin: '0.35rem 0' }}>{p.description}</p>
-                    <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
-                      {p.skills.map((sk, idx) => (
-                        <span key={idx} className="badge badge-gray">{sk}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Verified Certifications */}
-            <div className="card" style={{ padding: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
-                Certifications
-              </h3>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
-                {student.portfolio.certifications.map((c) => (
-                  <div key={c.id} style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid var(--border-subtle)',
-                    padding: '1rem',
-                    borderRadius: 'var(--radius-sm)'
-                  }}>
-                    <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '0.925rem' }}>{c.name}</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-                      Issuer: <strong>{c.issuer}</strong> · Issued {c.date}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.5rem' }}>
-                      <span className="badge badge-teal">Verified</span>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-light)' }}>{c.credentialId}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         )}
 
-        {/* Tab 6: Interactive Skill Assessment Quiz */}
+        {/* Tab: Interactive Assessment */}
         {activeTab === 'assessment' && (
           <div className="card" style={{ padding: '2rem', maxWidth: '750px', margin: '0 auto' }}>
             {!quizCompleted ? (
@@ -549,7 +624,7 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
 
                 {/* Progress bar */}
                 <div style={{ height: '6px', backgroundColor: 'var(--bg-subtle)', borderRadius: '3px', marginBottom: '2rem', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${((quizIndex + 1) / assessmentQuestions.length) * 100}%`, backgroundColor: 'var(--accent-primary)', transition: 'width 0.3s ease' }}></div>
+                  <div style={{ height: '100%', width: `${((quizIndex + 1) / assessmentQuestions.length) * 100}%`, backgroundColor: 'var(--accent-primary)', transition: 'width 0.3s ease' }} />
                 </div>
 
                 {/* Question */}
@@ -630,12 +705,12 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
                   Assessment Complete!
                 </h2>
                 <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', maxWidth: '450px', margin: '0 auto 1.5rem auto' }}>
-                  Your skill profile has been dynamically updated in local React state. Your readiness score increased to <strong>{student.overallReadiness}%</strong>.
+                  Your skill profile and Competency Twin score have been updated dynamically in local session state.
                 </p>
 
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-                  <button onClick={() => setActiveTab('profile')} className="btn btn-primary">
-                    View Updated Profile
+                  <button onClick={() => setActiveTab('twin')} className="btn btn-primary">
+                    View Competency Twin
                   </button>
                   <button onClick={handleResetQuiz} className="btn btn-secondary">
                     Retake Assessment
@@ -647,7 +722,27 @@ export default function StudentDashboard({ student, opportunities, assessmentQue
         )}
       </div>
 
-      {/* Mobile Navigation Bar for Authenticated Student */}
+      {/* Feature 1 Project Analysis Modal */}
+      {showProjectModal && (
+        <ProjectVerificationModal
+          onClose={() => setShowProjectModal(false)}
+          onVerifyProject={handleVerifyProjectComplete}
+        />
+      )}
+
+      {/* Feature 2 Challenge Submission Modal */}
+      {selectedChallengeForSub && (
+        <ChallengeSubmissionModal
+          challenge={selectedChallengeForSub}
+          onClose={() => setSelectedChallengeForSub(null)}
+          onSubmitSolution={(sub) => {
+            handleChallengeSubmitted(sub);
+            setSelectedChallengeForSub(null);
+          }}
+        />
+      )}
+
+      {/* Mobile Navigation Bar */}
       <MobileBottomNav
         role="student"
         activeTab={activeTab}

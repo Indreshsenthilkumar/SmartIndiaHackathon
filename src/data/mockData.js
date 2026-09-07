@@ -3,6 +3,7 @@
 
 export const initialStudent = {
   id: "student-101",
+  rollNumber: "2026-IT-101",
   name: "Indresh S",
   degree: "B.Tech Information Technology",
   institution: "National Institute of Technology Consortium",
@@ -13,6 +14,42 @@ export const initialStudent = {
   assessedSkillsCount: 12,
   strongMatchesCount: 8,
   applicationsCount: 3,
+
+  // Feature 1: Competency Twin Metric (What You Know vs What You Can Build)
+  competencyTwin: {
+    overallScore: 75,
+    knowledgeScore: 72, // Based on benchmark assessments
+    buildScore: 78,     // Based on verified project & code complexity analysis
+    analyzedReposCount: 2,
+    verifiedSkillsCount: 6
+  },
+
+  analyzedProjects: [
+    {
+      id: "p-1",
+      title: "User Engagement Telemetry Dashboard",
+      repoUrl: "github.com/indresh/engagement-dash",
+      languageComposition: "SQL (60%), JavaScript (25%), CSS (15%)",
+      complexityScore: 84,
+      practicalContribution: "92%",
+      status: "Verified",
+      verifiedSkills: ["SQL", "Product Analytics", "Figma & Wireframing"],
+      summary: "Evaluated 10k user telemetry logs, identified 3 retention drop-off bottlenecks, and built interactive funnels."
+    },
+    {
+      id: "p-2",
+      title: "E-Commerce Cohort Analysis Pipeline",
+      repoUrl: "github.com/indresh/cohort-pipeline",
+      languageComposition: "Python (70%), SQL (30%)",
+      complexityScore: 88,
+      practicalContribution: "95%",
+      status: "Verified",
+      verifiedSkills: ["Python Fundamentals", "SQL", "Excel & Data Modeling"],
+      summary: "Cleaned and processed 50k transaction records to compute 30-day user cohort survival curves."
+    }
+  ],
+
+  submittedChallenges: ["chal-1"],
 
   // Qualitative proficiencies instead of fake decimals
   skills: [
@@ -157,6 +194,226 @@ export const initialStudent = {
         period: "Jan 2026 – May 2026",
         details: "Synthesized feedback from 400+ students to iterate campus mobile portal navigation specs."
       }
+    ]
+  }
+};
+
+// Feature 2: Industry Challenge Engine Dataset
+export const initialChallenges = [
+  {
+    id: "chal-1",
+    title: "Enterprise Cohort Retention Data Pipeline",
+    industryPartner: "Meridian Digital",
+    domain: "Data Analytics & SQL",
+    difficulty: "Intermediate",
+    deadline: "15 Sep 2026",
+    stipendOrReward: "Verified SQL & Pipeline Badge + Fast-track Interview Shortlist",
+    skillsVerified: ["SQL", "Product Analytics", "Data Modeling"],
+    description: "Build an automated cohort retention calculation query that processes 100k simulated user event logs and produces weekly user drop-off metrics.",
+    problemDetails: [
+      "Process raw multi-table user event logs with timestamps.",
+      "Calculate 7-day and 30-day user cohort retention percentages.",
+      "Optimize SQL query execution time under 500ms.",
+      "Deliver a clean Markdown documentation report with query benchmarks."
+    ],
+    submissionsCount: 14,
+    status: "Active"
+  },
+  {
+    id: "chal-2",
+    title: "Campus Mobile Portal UX Teardown & Wireframes",
+    industryPartner: "Kite Studios",
+    domain: "Product & UI/UX Design",
+    difficulty: "Beginner",
+    deadline: "20 Sep 2026",
+    stipendOrReward: "Verified Wireframing & UX Spec Badge",
+    skillsVerified: ["Figma & Wireframing", "User Research", "Product Analytics"],
+    description: "Conduct a heuristic evaluation of higher-education student mobile onboarding flows and prototype an interactive 5-step student registration screen.",
+    problemDetails: [
+      "Identify top 3 user friction points in traditional registration forms.",
+      "Draft clickable high-fidelity Figma mobile wireframe prototypes.",
+      "Submit a 5-page product specification document detailing UX decisions."
+    ],
+    submissionsCount: 8,
+    status: "Active"
+  },
+  {
+    id: "chal-3",
+    title: "Microservices Container Log Parser Daemon",
+    industryPartner: "Vertex Systems",
+    domain: "Cloud & Systems Scripting",
+    difficulty: "Advanced",
+    deadline: "25 Sep 2026",
+    stipendOrReward: "Verified Python & Cloud Badge + ₹10,000 Prize Pool",
+    skillsVerified: ["Python Fundamentals", "Linux", "Cloud Fundamentals"],
+    description: "Write a lightweight Python automation script that collects Docker container logs, parses exception tracebacks, and exports structured JSON metrics.",
+    problemDetails: [
+      "Stream log files asynchronously without blocking main process.",
+      "Extract error patterns using regex and group frequency counters.",
+      "Expose clean JSON summary endpoints for health checks."
+    ],
+    submissionsCount: 12,
+    status: "Active"
+  }
+];
+
+// Feature 3: Searchable Student Registry for Institutions (Roll No / Student ID Lookup)
+export const searchableStudents = {
+  "2026-IT-101": {
+    rollNumber: "2026-IT-101",
+    name: "Indresh S",
+    degree: "B.Tech Information Technology",
+    department: "Information Technology",
+    gradYear: "2026",
+    cgpa: "8.75 / 10",
+    overallReadiness: 72,
+    competencyTwin: {
+      overallScore: 75,
+      knowledgeScore: 72,
+      buildScore: 78,
+      analyzedReposCount: 2
+    },
+    topSkills: [
+      { name: "SQL", level: "Developing", evidence: "User Engagement Dashboard (GitHub Verified)" },
+      { name: "Excel & Data Modeling", level: "Strong", evidence: "Financial Workshop Cert" },
+      { name: "Communication", level: "Strong", evidence: "Debate Team Lead" },
+      { name: "Figma & Wireframing", level: "Strong", evidence: "Mobile Portal UX Spec" }
+    ],
+    skillGaps: [
+      { skill: "Product Analytics", current: "Developing", target: "Proficient", action: "Complete 4-week Analytics Case Study" },
+      { skill: "SQL Querying & Joins", current: "Developing", target: "Proficient", action: "Enroll in SQL Bridge Lab" },
+      { skill: "A/B Testing Concepts", current: "Emerging", target: "Developing", action: "Review Statistical Fundamentals" }
+    ],
+    githubProjects: [
+      { title: "User Engagement Telemetry Dashboard", repoUrl: "github.com/indresh/engagement-dash", complexity: "84/100", lang: "SQL, JS" },
+      { title: "E-Commerce Cohort Analysis Pipeline", repoUrl: "github.com/indresh/cohort-pipeline", complexity: "88/100", lang: "Python, SQL" }
+    ],
+    certifications: [
+      "Google Data Analytics Professional Certificate (Verified)",
+      "SQL for Data Science & BI (Verified)"
+    ],
+    completedChallenges: [
+      { title: "Enterprise Cohort Retention Data Pipeline", partner: "Meridian Digital", status: "Verified & Badge Awarded" }
+    ],
+    activeInternship: "Junior Product Researcher at Campus Innovation Lab",
+    recommendedActions: [
+      "Assign SQL Bridge Program (Pre-final batch)",
+      "Schedule Product Analytics Lab Mentorship"
+    ]
+  },
+
+  "2026-CSE-142": {
+    rollNumber: "2026-CSE-142",
+    name: "Meera Krishnan",
+    degree: "B.Tech Computer Science",
+    department: "Computer Science",
+    gradYear: "2026",
+    cgpa: "9.20 / 10",
+    overallReadiness: 84,
+    competencyTwin: {
+      overallScore: 86,
+      knowledgeScore: 84,
+      buildScore: 88,
+      analyzedReposCount: 3
+    },
+    topSkills: [
+      { name: "SQL", level: "Proficient", evidence: "Open-Source Query Optimization Repo" },
+      { name: "Python Fundamentals", level: "Strong", evidence: "Machine Learning Pipeline" },
+      { name: "Product Analytics", level: "Proficient", evidence: "Campus Portal Telemetry" }
+    ],
+    skillGaps: [
+      { skill: "Cloud Fundamentals", current: "Developing", target: "Proficient", action: "Enroll in Cloud Certification Drive" }
+    ],
+    githubProjects: [
+      { title: "ML Customer Attrition Engine", repoUrl: "github.com/meera/attrition-engine", complexity: "92/100", lang: "Python" },
+      { title: "Distributed Task Queue", repoUrl: "github.com/meera/task-queue", complexity: "89/100", lang: "C++, Python" }
+    ],
+    certifications: [
+      "AWS Certified Cloud Practitioner (Verified)",
+      "Advanced Python & Algorithms (Verified)"
+    ],
+    completedChallenges: [
+      { title: "Campus Mobile Portal UX Teardown", partner: "Kite Studios", status: "Verified & Badge Awarded" },
+      { title: "Microservices Container Log Parser", partner: "Vertex Systems", status: "Verified & Badge Awarded" }
+    ],
+    activeInternship: "Backend Engineering Intern at Northstar Tech",
+    recommendedActions: [
+      "Recommend for Direct Industry Placement Shortlist"
+    ]
+  },
+
+  "2026-ECE-208": {
+    rollNumber: "2026-ECE-208",
+    name: "Rohan Varma",
+    degree: "B.Tech Electronics & Comm",
+    department: "Electronics & Comm",
+    gradYear: "2026",
+    cgpa: "8.10 / 10",
+    overallReadiness: 76,
+    competencyTwin: {
+      overallScore: 78,
+      knowledgeScore: 76,
+      buildScore: 80,
+      analyzedReposCount: 2
+    },
+    topSkills: [
+      { name: "Python Fundamentals", level: "Proficient", evidence: "IoT Sensor Logger" },
+      { name: "Linux System Admin", level: "Proficient", evidence: "Raspberry Pi Automation Script" }
+    ],
+    skillGaps: [
+      { skill: "SQL Querying", current: "Emerging", target: "Developing", action: "Assign SQL Bridge Program" },
+      { skill: "Power BI", current: "Emerging", target: "Developing", action: "BI Workshop Assignment" }
+    ],
+    githubProjects: [
+      { title: "IoT Environment Monitor", repoUrl: "github.com/rohan/iot-monitor", complexity: "82/100", lang: "Python, C++" }
+    ],
+    certifications: [
+      "Embedded Systems & IoT Specialization"
+    ],
+    completedChallenges: [
+      { title: "Microservices Container Log Parser", partner: "Vertex Systems", status: "Verified & Badge Awarded" }
+    ],
+    activeInternship: "Embedded Systems Intern at Vertex Systems",
+    recommendedActions: [
+      "Assign SQL Bridge Program for ECE batch"
+    ]
+  },
+
+  "2026-DS-305": {
+    rollNumber: "2026-DS-305",
+    name: "Ananya Rao",
+    degree: "B.Sc Data Science",
+    department: "Information Technology",
+    gradYear: "2025",
+    cgpa: "9.45 / 10",
+    overallReadiness: 92,
+    competencyTwin: {
+      overallScore: 94,
+      knowledgeScore: 92,
+      buildScore: 96,
+      analyzedReposCount: 4
+    },
+    topSkills: [
+      { name: "SQL", level: "Strong", evidence: "Complex Window Function Benchmarks" },
+      { name: "Power BI", level: "Strong", evidence: "Published Financial Dashboard" },
+      { name: "Python Fundamentals", level: "Strong", evidence: "Pandas Data Wrangling" }
+    ],
+    skillGaps: [
+      { skill: "A/B Testing Concepts", current: "Developing", target: "Proficient", action: "Advanced Statistical Fellowship" }
+    ],
+    githubProjects: [
+      { title: "Global Economic Data Dashboard", repoUrl: "github.com/ananya/econ-dash", complexity: "95/100", lang: "Python, Power BI" }
+    ],
+    certifications: [
+      "Microsoft Certified: Power BI Data Analyst Associate (Verified)",
+      "Google Data Analytics Professional Certificate (Verified)"
+    ],
+    completedChallenges: [
+      { title: "Enterprise Cohort Retention Data Pipeline", partner: "Meridian Digital", status: "Verified & Top Performer" }
+    ],
+    activeInternship: "Data Science Trainee at Apex Analytics",
+    recommendedActions: [
+      "Fast-track to High-Value Industry Placement"
     ]
   }
 };
@@ -420,7 +677,7 @@ export const institutionMetrics = {
       { department: "Information Technology", enrolled: 180, assessed: 172, ready: 78, activeInterns: 48 },
       { department: "Computer Science", enrolled: 240, assessed: 235, ready: 112, activeInterns: 62 },
       { department: "Electronics & Comm", enrolled: 160, assessed: 148, ready: 54, activeInterns: 28 },
-      { department: "Mechanical Engg", enrolled: 140, assessed: 120, ready: 32, activeInterns: 14 }
+      { department: "Mechanical Engg", enrolled: 120, assessed: 120, ready: 32, activeInterns: 14 }
     ]
   }
 };

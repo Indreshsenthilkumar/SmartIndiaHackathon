@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Briefcase, Users, Building2, PlusCircle, CheckCircle2, ArrowRight, MapPin, DollarSign, Search, ShieldCheck } from 'lucide-react';
+import { Briefcase, Users, Building2, PlusCircle, CheckCircle2, ArrowRight, MapPin, DollarSign, Search, ShieldCheck, Target, Award, Code2 } from 'lucide-react';
 import MobileBottomNav from '../components/MobileBottomNav';
 
-export default function IndustryDashboard({ industry, opportunities, onAddOpportunity, onNavigate }) {
-  const [activeTab, setActiveTab] = useState('overview'); // overview, post, candidates, collaborations
+export default function IndustryDashboard({ industry, opportunities, challenges, onAddOpportunity, onAddChallenge, onNavigate }) {
+  const [activeTab, setActiveTab] = useState('overview'); // overview, post, challenges, candidates, collaborations
   const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   // Form State for Create Opportunity
   const [formData, setFormData] = useState({
@@ -18,6 +19,20 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
     eligibility: 'B.Tech / B.E (2025-2026 Batch)',
     description: '',
     requiredSkillsStr: 'SQL, Python Fundamentals, Communication'
+  });
+
+  // Form State for Create Challenge (Feature 2)
+  const [chalFormData, setChalFormData] = useState({
+    title: '',
+    industryPartner: 'Vertex Digital Solutions',
+    domain: 'Data Analytics & SQL',
+    difficulty: 'Intermediate',
+    deadline: '30 Sep 2026',
+    stipendOrReward: 'Verified SQL Badge + Interview Fast-track',
+    skillsVerifiedStr: 'SQL, Product Analytics, Data Modeling',
+    description: '',
+    detail1: 'Process multi-table event log records.',
+    detail2: 'Calculate retention metrics.'
   });
 
   const handlePublishSubmit = (e) => {
@@ -54,10 +69,10 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
     };
 
     onAddOpportunity(newOpp);
+    setToastMessage('Opportunity Published to Network!');
     setShowSuccessToast(true);
     setTimeout(() => setShowSuccessToast(false), 4000);
 
-    // Reset Form
     setFormData({
       title: '',
       company: 'Vertex Digital Solutions',
@@ -72,6 +87,48 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
     });
 
     setActiveTab('overview');
+  };
+
+  const handlePublishChallenge = (e) => {
+    e.preventDefault();
+    if (!chalFormData.title) return;
+
+    const skillsArr = chalFormData.skillsVerifiedStr.split(',').map(s => s.trim()).filter(Boolean);
+
+    const newChal = {
+      id: `chal-${Date.now()}`,
+      title: chalFormData.title,
+      industryPartner: chalFormData.industryPartner,
+      domain: chalFormData.domain,
+      difficulty: chalFormData.difficulty,
+      deadline: chalFormData.deadline,
+      stipendOrReward: chalFormData.stipendOrReward,
+      skillsVerified: skillsArr,
+      description: chalFormData.description || 'Published via ALIGN Industry Challenge Engine.',
+      problemDetails: [chalFormData.detail1, chalFormData.detail2].filter(Boolean),
+      submissionsCount: 0,
+      status: 'Active'
+    };
+
+    onAddChallenge(newChal);
+    setToastMessage('Industry Challenge Problem Statement Published!');
+    setShowSuccessToast(true);
+    setTimeout(() => setShowSuccessToast(false), 4000);
+
+    setChalFormData({
+      title: '',
+      industryPartner: 'Vertex Digital Solutions',
+      domain: 'Data Analytics & SQL',
+      difficulty: 'Intermediate',
+      deadline: '30 Sep 2026',
+      stipendOrReward: 'Verified SQL Badge + Interview Fast-track',
+      skillsVerifiedStr: 'SQL, Product Analytics, Data Modeling',
+      description: '',
+      detail1: 'Process multi-table event log records.',
+      detail2: 'Calculate retention metrics.'
+    });
+
+    setActiveTab('challenges');
   };
 
   return (
@@ -94,7 +151,7 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
           alignItems: 'center',
           gap: '0.5rem'
         }}>
-          <CheckCircle2 size={18} /> Opportunity Published & Added to Local State!
+          <CheckCircle2 size={18} /> {toastMessage}
         </div>
       )}
 
@@ -112,7 +169,7 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
                 Build your early-career talent pipeline
               </h1>
               <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-                Define the skills you need, discover relevant candidates, and create meaningful industry-academia collaborations.
+                Define required skills, publish problem statements, and evaluate candidate build capabilities.
               </div>
             </div>
 
@@ -131,6 +188,7 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
           }}>
             {[
               { id: 'overview', label: 'Overview', icon: Briefcase },
+              { id: 'challenges', label: 'Industry Challenge Manager', icon: Target },
               { id: 'post', label: 'Create Opportunity', icon: PlusCircle },
               { id: 'candidates', label: 'Candidate Discovery', icon: Users },
               { id: 'collaborations', label: 'Institutional Collaborations', icon: Building2 }
@@ -183,77 +241,152 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
           </div>
 
           <div className="card" style={{ padding: '1.25rem' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>INDUSTRY CHALLENGES</div>
+            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent-primary)', marginTop: '0.2rem' }}>
+              {challenges.length}
+            </div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Active Problem Statements</div>
+          </div>
+
+          <div className="card" style={{ padding: '1.25rem' }}>
             <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>MATCHING CANDIDATES</div>
             <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0D9488', marginTop: '0.2rem' }}>
               {industry.matchingCandidatePool}
             </div>
             <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Assessed Skill Baseline</div>
           </div>
-
-          <div className="card" style={{ padding: '1.25rem' }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>INSTITUTION PARTNERS</div>
-            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent-primary)', marginTop: '0.2rem' }}>
-              {industry.institutionPartners}
-            </div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Consortium Universities</div>
-          </div>
         </div>
+
+        {/* Feature 2: Industry Challenge Manager Tab */}
+        {activeTab === 'challenges' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div className="card" style={{ padding: '2rem', maxWidth: '750px', margin: '0 auto', width: '100%' }}>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <span className="badge badge-blue" style={{ marginBottom: '0.35rem' }}>
+                  FEATURE 2 · INDUSTRY CHALLENGE ENGINE
+                </span>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                  Publish Real-World Problem Statement
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                  Allow students to solve actual industry challenges and prove practical capabilities before interviews.
+                </p>
+              </div>
+
+              <form onSubmit={handlePublishChallenge}>
+                <div className="form-group">
+                  <label className="form-label">Challenge Title / Problem Statement *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Real-Time Telemetry Event Log Optimizer"
+                    value={chalFormData.title}
+                    onChange={(e) => setChalFormData({ ...chalFormData, title: e.target.value })}
+                    className="form-input"
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">Domain Area</label>
+                    <select
+                      value={chalFormData.domain}
+                      onChange={(e) => setChalFormData({ ...chalFormData, domain: e.target.value })}
+                      className="form-select"
+                    >
+                      <option value="Data Analytics & SQL">Data Analytics & SQL</option>
+                      <option value="Product & UI/UX Design">Product & UI/UX Design</option>
+                      <option value="Cloud & Systems Scripting">Cloud & Systems Scripting</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Difficulty Level</label>
+                    <select
+                      value={chalFormData.difficulty}
+                      onChange={(e) => setChalFormData({ ...chalFormData, difficulty: e.target.value })}
+                      className="form-select"
+                    >
+                      <option value="Beginner">Beginner</option>
+                      <option value="Intermediate">Intermediate</option>
+                      <option value="Advanced">Advanced</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                  <div className="form-group">
+                    <label className="form-label">Submission Deadline</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 30 Sep 2026"
+                      value={chalFormData.deadline}
+                      onChange={(e) => setChalFormData({ ...chalFormData, deadline: e.target.value })}
+                      className="form-input"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Stipend / Verified Skill Reward</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Verified SQL Badge + Fast-track Interview"
+                      value={chalFormData.stipendOrReward}
+                      onChange={(e) => setChalFormData({ ...chalFormData, stipendOrReward: e.target.value })}
+                      className="form-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Skills to Verify (Comma separated) *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. SQL, Product Analytics, Data Modeling"
+                    value={chalFormData.skillsVerifiedStr}
+                    onChange={(e) => setChalFormData({ ...chalFormData, skillsVerifiedStr: e.target.value })}
+                    className="form-input"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Problem Statement Overview</label>
+                  <textarea
+                    rows="3"
+                    placeholder="Describe the challenge background and goals..."
+                    value={chalFormData.description}
+                    onChange={(e) => setChalFormData({ ...chalFormData, description: e.target.value })}
+                    className="form-textarea"
+                  />
+                </div>
+
+                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
+                  Publish Industry Challenge to Students
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
 
         {/* Tab 1: Overview */}
         {activeTab === 'overview' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {/* Action Banner */}
             <div className="card" style={{ padding: '1.5rem', backgroundColor: 'var(--accent-light)', border: '1px solid var(--accent-border)' }}>
               <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)' }}>
                 Find candidates based on verified skills rather than resume keywords alone.
               </h3>
               <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem', marginBottom: '1rem' }}>
-                ALIGN maps required role skills directly against university student self-assessments and lab evidence.
+                ALIGN maps required role skills directly against university student self-assessments, GitHub static code analysis, and real-world industry challenge submissions.
               </p>
               <button onClick={() => setActiveTab('candidates')} className="btn btn-primary btn-sm">
                 Explore Matching Candidates Pool
               </button>
             </div>
-
-            {/* Active Listings Grid */}
-            <div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem' }}>
-                Your Published Opportunities ({opportunities.length})
-              </h3>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
-                {opportunities.map((opp) => (
-                  <div key={opp.id} className="card" style={{ padding: '1.25rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <span className="badge badge-gray">{opp.type}</span>
-                      <span className="badge badge-teal">{opp.applicantsCount || 42} Applicants</span>
-                    </div>
-
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '0.5rem' }}>
-                      {opp.title}
-                    </h4>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-                      {opp.location} ({opp.workMode}) · {opp.stipend}
-                    </div>
-
-                    <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '0.75rem', marginTop: '0.85rem' }}>
-                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-light)', uppercase: true, marginBottom: '0.35rem' }}>
-                        Required Skills:
-                      </div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-                        {opp.requiredSkills.map((sk, idx) => (
-                          <span key={idx} className="badge badge-blue">{sk}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         )}
 
-        {/* Tab 2: Create Opportunity Form */}
+        {/* Tab: Create Opportunity */}
         {activeTab === 'post' && (
           <div className="card" style={{ padding: '2rem', maxWidth: '750px', margin: '0 auto' }}>
             <div style={{ marginBottom: '1.5rem' }}>
@@ -261,9 +394,6 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
               <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>
                 Define Required Skills & Role
               </h2>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-                Specify role parameters and required skills to match candidate profiles transparently.
-              </p>
             </div>
 
             <form onSubmit={handlePublishSubmit}>
@@ -279,70 +409,6 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-                <div className="form-group">
-                  <label className="form-label">Opportunity Type</label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="form-select"
-                  >
-                    <option value="Internship">Internship</option>
-                    <option value="Jobs">Entry-Level Role</option>
-                    <option value="Projects">Live Project</option>
-                    <option value="Learning">Learning Program</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Work Mode</label>
-                  <select
-                    value={formData.workMode}
-                    onChange={(e) => setFormData({ ...formData, workMode: e.target.value })}
-                    className="form-select"
-                  >
-                    <option value="Hybrid">Hybrid</option>
-                    <option value="Remote">Remote</option>
-                    <option value="On-site">On-site</option>
-                  </select>
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-                <div className="form-group">
-                  <label className="form-label">Location</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Bengaluru / Chennai"
-                    value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="form-input"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Duration</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. 3 months / Full-time"
-                    value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="form-input"
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Stipend / Compensation</label>
-                <input
-                  type="text"
-                  placeholder="e.g. ₹25,000 / mo"
-                  value={formData.stipend}
-                  onChange={(e) => setFormData({ ...formData, stipend: e.target.value })}
-                  className="form-input"
-                />
-              </div>
-
               <div className="form-group">
                 <label className="form-label">Required Skills (Comma separated) *</label>
                 <input
@@ -353,20 +419,6 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
                   onChange={(e) => setFormData({ ...formData, requiredSkillsStr: e.target.value })}
                   className="form-input"
                 />
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-light)', marginTop: '0.2rem' }}>
-                  Candidate match scores will be calculated directly against these listed skills.
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Short Role Description</label>
-                <textarea
-                  rows="3"
-                  placeholder="Describe key responsibilities and expectations..."
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="form-textarea"
-                />
               </div>
 
               <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
@@ -376,7 +428,7 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
           </div>
         )}
 
-        {/* Tab 3: Candidate Discovery */}
+        {/* Tab: Candidate Discovery */}
         {activeTab === 'candidates' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
@@ -399,9 +451,6 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
                     <strong>Evidence:</strong> {cand.evidence}
                   </div>
 
-                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', uppercase: true, marginBottom: '0.35rem' }}>
-                    Assessed Skills:
-                  </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '1rem' }}>
                     {cand.skills.map((s, idx) => (
                       <span key={idx} className="badge badge-blue">✓ {s}</span>
@@ -417,7 +466,7 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
           </div>
         )}
 
-        {/* Tab 4: Institutional Collaborations */}
+        {/* Tab: Collaborations */}
         {activeTab === 'collaborations' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
@@ -428,11 +477,7 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
               {industry.collaborations.map((col) => (
                 <div key={col.id} className="card" style={{ padding: '1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <span className="badge badge-blue">{col.type}</span>
-                    <span className="badge badge-gray">{col.duration}</span>
-                  </div>
-
+                  <span className="badge badge-blue" style={{ marginBottom: '0.5rem' }}>{col.type}</span>
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', margin: '0.35rem 0' }}>
                     {col.title}
                   </h3>
@@ -440,14 +485,9 @@ export default function IndustryDashboard({ industry, opportunities, onAddOpport
                     {col.description}
                   </p>
 
-                  <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '0.85rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.78rem', color: 'var(--text-light)' }}>
-                      <strong>{col.interestedCount}</strong> Faculty/Institutions Registered
-                    </span>
-                    <button className="btn btn-primary btn-sm">
-                      Explore Partnership
-                    </button>
-                  </div>
+                  <button className="btn btn-primary btn-sm" style={{ width: '100%' }}>
+                    Explore Partnership
+                  </button>
                 </div>
               ))}
             </div>

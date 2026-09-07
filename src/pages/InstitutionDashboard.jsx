@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { Building2, BarChart2, Briefcase, Award, CheckCircle2, AlertCircle, ArrowRight, Filter, Users } from 'lucide-react';
+import { Building2, BarChart2, Briefcase, Award, CheckCircle2, AlertCircle, ArrowRight, Filter, Users, Search, UserCheck } from 'lucide-react';
 import MobileBottomNav from '../components/MobileBottomNav';
+import StudentReadinessSearchModal from '../components/StudentReadinessSearchModal';
 
 export default function InstitutionDashboard({ institution, onNavigate }) {
   const [activeTab, setActiveTab] = useState('overview'); // overview, readiness, demand, outcomes
   const [selectedDept, setSelectedDept] = useState('All');
+  const [searchModalRollNo, setSearchModalRollNo] = useState(null);
+
+  const handleOpenSearch = (rollNo = '2026-IT-101') => {
+    setSearchModalRollNo(rollNo);
+  };
 
   return (
     <div style={{ backgroundColor: 'var(--bg-main)', minHeight: '90vh', paddingBottom: '4rem' }}>
@@ -26,8 +32,9 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
               </div>
             </div>
 
-            <button onClick={() => onNavigate('/opportunities')} className="btn btn-secondary btn-sm">
-              Explore Active Industry Opportunities
+            {/* Feature 3 Action Trigger */}
+            <button onClick={() => handleOpenSearch('2026-IT-101')} className="btn btn-primary btn-sm">
+              <Search size={15} /> Search Student ID / Roll No
             </button>
           </div>
 
@@ -41,7 +48,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
           }}>
             {[
               { id: 'overview', label: 'Overview', icon: Building2 },
-              { id: 'readiness', label: 'Student Readiness', icon: BarChart2 },
+              { id: 'readiness', label: 'Student Readiness & Search', icon: BarChart2 },
               { id: 'demand', label: 'Industry Skill Demand', icon: Briefcase },
               { id: 'outcomes', label: 'Placement & Internship Outcomes', icon: Award }
             ].map((tab) => {
@@ -77,7 +84,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
 
       {/* Main Container */}
       <div className="max-width-wrapper" style={{ marginTop: '2rem' }}>
-        {/* KPI Cards Grid (Restrained 4 KPIs) */}
+        {/* KPI Cards Grid */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -115,6 +122,49 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
             </div>
             <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Target: 76% by Q4</div>
           </div>
+        </div>
+
+        {/* Feature 3 Quick Search Banner */}
+        <div className="card" style={{
+          padding: '1.5rem',
+          backgroundColor: 'var(--accent-light)',
+          border: '1px solid var(--accent-border)',
+          marginBottom: '2rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem'
+        }}>
+          <div>
+            <span className="badge badge-blue" style={{ marginBottom: '0.35rem' }}>
+              FEATURE 3 · INSTITUTION STUDENT READINESS SEARCH
+            </span>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)' }}>
+              Search Any Student's Complete 360° Readiness Profile
+            </h3>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+              Track assessment results, Competency Twin, GitHub projects, challenge badges, and recommended actions by Roll Number.
+            </p>
+
+            <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.85rem', flexWrap: 'wrap' }}>
+              {['2026-IT-101', '2026-CSE-142', '2026-ECE-208', '2026-DS-305'].map((roll) => (
+                <button
+                  key={roll}
+                  onClick={() => handleOpenSearch(roll)}
+                  className="btn btn-secondary btn-sm"
+                  style={{ fontSize: '0.78rem', padding: '0.25rem 0.65rem' }}
+                >
+                  <Search size={12} /> {roll}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button onClick={() => handleOpenSearch('2026-IT-101')} className="btn btn-primary">
+            Open Student ID Lookup
+            <ArrowRight size={16} />
+          </button>
         </div>
 
         {/* Tab 1: Overview */}
@@ -219,27 +269,33 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
           </div>
         )}
 
-        {/* Tab 2: Student Readiness Breakdown */}
+        {/* Tab 2: Student Readiness & Roll No Lookup */}
         {activeTab === 'readiness' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>Student Readiness Breakdown</h2>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Department-level student readiness distribution and active internship rates.</p>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>Student Readiness & Roll No Lookup</h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Search individual student profiles by ID or inspect department-level readiness metrics.</p>
               </div>
 
-              <select
-                value={selectedDept}
-                onChange={(e) => setSelectedDept(e.target.value)}
-                className="form-select"
-                style={{ width: 'auto' }}
-              >
-                <option value="All">All Departments</option>
-                <option value="Information Technology">Information Technology</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Electronics & Comm">Electronics & Comm</option>
-                <option value="Mechanical Engg">Mechanical Engg</option>
-              </select>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <button onClick={() => handleOpenSearch('2026-IT-101')} className="btn btn-primary btn-sm">
+                  <Search size={14} /> Search Student ID / Roll No
+                </button>
+
+                <select
+                  value={selectedDept}
+                  onChange={(e) => setSelectedDept(e.target.value)}
+                  className="form-select"
+                  style={{ width: 'auto' }}
+                >
+                  <option value="All">All Departments</option>
+                  <option value="Information Technology">Information Technology</option>
+                  <option value="Computer Science">Computer Science</option>
+                  <option value="Electronics & Comm">Electronics & Comm</option>
+                  <option value="Mechanical Engg">Mechanical Engg</option>
+                </select>
+              </div>
             </div>
 
             {/* Department Breakdown Table */}
@@ -253,6 +309,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                     <th>Career-Ready</th>
                     <th>Active Interns</th>
                     <th>Readiness %</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -260,6 +317,11 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                     .filter(d => selectedDept === 'All' || d.department === selectedDept)
                     .map((dept, idx) => {
                       const percentage = Math.round((dept.ready / dept.assessed) * 100);
+                      const sampleRollNo = 
+                        dept.department.includes('IT') ? '2026-IT-101' :
+                        dept.department.includes('Computer') ? '2026-CSE-142' :
+                        dept.department.includes('Electronics') ? '2026-ECE-208' : '2026-DS-305';
+
                       return (
                         <tr key={idx}>
                           <td style={{ fontWeight: 700 }}>{dept.department}</td>
@@ -269,6 +331,15 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                           <td>{dept.activeInterns}</td>
                           <td style={{ fontWeight: 700, color: percentage >= 50 ? '#0D9488' : 'var(--warning-text)' }}>
                             {percentage}%
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => handleOpenSearch(sampleRollNo)}
+                              className="btn btn-secondary btn-sm"
+                              style={{ fontSize: '0.75rem', padding: '0.2rem 0.55rem' }}
+                            >
+                              Inspect Student Dossier
+                            </button>
                           </td>
                         </tr>
                       );
@@ -330,51 +401,10 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                 </tbody>
               </table>
             </div>
-
-            {/* Recommended Institutional Action Cards */}
-            <div style={{ marginTop: '1rem' }}>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem' }}>
-                Recommended Institutional Action Plans
-              </h3>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '1.25rem'
-              }}>
-                {institution.recommendedActions.map((act) => (
-                  <div key={act.id} className="card" style={{ padding: '1.5rem' }}>
-                    <span className="badge badge-blue" style={{ marginBottom: '0.5rem' }}>
-                      {act.duration}
-                    </span>
-                    <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.35rem' }}>
-                      {act.title}
-                    </h4>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.85rem' }}>
-                      Target: <strong>{act.targetGroup}</strong>
-                    </div>
-                    <div style={{
-                      backgroundColor: 'var(--bg-subtle)',
-                      padding: '0.75rem',
-                      borderRadius: 'var(--radius-sm)',
-                      fontSize: '0.8rem',
-                      color: 'var(--text-main)',
-                      marginBottom: '1rem'
-                    }}>
-                      Expected Impact: {act.expectedImpact}
-                    </div>
-
-                    <button className="btn btn-primary btn-sm" style={{ width: '100%' }}>
-                      Initiate Action Plan
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         )}
 
-        {/* Tab 4: Placement & Internship Outcomes */}
+        {/* Tab 4: Outcomes */}
         {activeTab === 'outcomes' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div>
@@ -411,6 +441,14 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
           </div>
         )}
       </div>
+
+      {/* Feature 3 Student Readiness Search Modal */}
+      {searchModalRollNo && (
+        <StudentReadinessSearchModal
+          defaultRollNo={searchModalRollNo}
+          onClose={() => setSearchModalRollNo(null)}
+        />
+      )}
 
       {/* Mobile Navigation */}
       <MobileBottomNav

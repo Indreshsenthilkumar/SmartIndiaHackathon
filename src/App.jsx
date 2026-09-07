@@ -12,15 +12,16 @@ import StudentDashboard from './pages/StudentDashboard';
 import InstitutionDashboard from './pages/InstitutionDashboard';
 import IndustryDashboard from './pages/IndustryDashboard';
 import SkillsExplorePage from './pages/SkillsExplorePage';
+import ChallengesPage from './pages/ChallengesPage';
 import { StudentsPublicPage, InstitutionsPublicPage, IndustryPublicPage, AcademiciansPublicPage, AboutPage } from './pages/PublicPersonaPages';
 
 // Mock Data
-import { initialStudent, initialOpportunities, institutionMetrics, industryData, assessmentQuestions } from './data/mockData';
+import { initialStudent, initialOpportunities, initialChallenges, institutionMetrics, industryData, assessmentQuestions } from './data/mockData';
 
 export default function App() {
   // State Management
   const [currentRole, setCurrentRole] = useState('public'); // 'public', 'student', 'institution', 'industry'
-  const [currentRoute, setCurrentRoute] = useState('/'); // '/', '/opportunities', '/skills', '/students', etc.
+  const [currentRoute, setCurrentRoute] = useState('/');
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
   
   // Modals
@@ -30,6 +31,7 @@ export default function App() {
   // App Data State
   const [student, setStudent] = useState(initialStudent);
   const [opportunities, setOpportunities] = useState(initialOpportunities);
+  const [challenges, setChallenges] = useState(initialChallenges);
   const [institution, setInstitution] = useState(institutionMetrics);
   const [industry, setIndustry] = useState(industryData);
 
@@ -58,7 +60,6 @@ export default function App() {
 
   // Apply Handler
   const handleApplyToOpportunity = (opp) => {
-    // Check if already applied
     const alreadyApplied = student.applications.some(a => a.opportunityId === opp.id);
     if (alreadyApplied) return;
 
@@ -69,7 +70,7 @@ export default function App() {
       company: opp.company,
       location: `${opp.location} · ${opp.workMode}`,
       duration: opp.duration,
-      appliedDate: 'Today (6 Sep 2026)',
+      appliedDate: 'Today (7 Sep 2026)',
       status: 'Under review',
       matchScore: opp.matchScore,
       matchLabel: opp.matchLabel,
@@ -87,7 +88,6 @@ export default function App() {
       applications: [newApp, ...prev.applications]
     }));
 
-    // Update opportunity count
     setOpportunities(prev => prev.map(o => o.id === opp.id ? { ...o, applicantsCount: (o.applicantsCount || 0) + 1, applied: true } : o));
   };
 
@@ -107,6 +107,19 @@ export default function App() {
   // Add Opportunity from Industry Portal
   const handleAddOpportunity = (newOpp) => {
     setOpportunities(prev => [newOpp, ...prev]);
+  };
+
+  // Feature 2: Add Challenge from Industry Portal
+  const handleAddChallenge = (newChal) => {
+    setChallenges(prev => [newChal, ...prev]);
+  };
+
+  // Feature 2: Submit Solution to Challenge
+  const handleChallengeSubmission = (submission) => {
+    setStudent(prev => ({
+      ...prev,
+      studentSubmissions: [submission, ...(prev.studentSubmissions || [])]
+    }));
   };
 
   // Render View Router
@@ -145,6 +158,14 @@ export default function App() {
             onOpenMatchModal={(opp) => setMatchModalOpportunity(opp)}
           />
         );
+      case '/challenges':
+        return (
+          <ChallengesPage
+            challenges={challenges}
+            onSubmitSolution={handleChallengeSubmission}
+            studentSubmissions={student.studentSubmissions || []}
+          />
+        );
       case '/skills':
         return <SkillsExplorePage onNavigate={handleNavigate} />;
       case '/students':
@@ -162,6 +183,7 @@ export default function App() {
           <StudentDashboard
             student={student}
             opportunities={opportunities}
+            challenges={challenges}
             assessmentQuestions={assessmentQuestions}
             onUpdateStudent={(updated) => setStudent(updated)}
             onOpenMatchModal={(opp) => setMatchModalOpportunity(opp)}
@@ -175,7 +197,9 @@ export default function App() {
           <IndustryDashboard
             industry={industry}
             opportunities={opportunities}
+            challenges={challenges}
             onAddOpportunity={handleAddOpportunity}
+            onAddChallenge={handleAddChallenge}
             onNavigate={handleNavigate}
           />
         );
@@ -242,7 +266,7 @@ export default function App() {
               >
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>Student Persona</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Skill profile, gaps, matching opportunities & portfolio</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Competency Twin, GitHub analysis, challenges & portfolio</div>
                 </div>
               </button>
 
@@ -253,7 +277,7 @@ export default function App() {
               >
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>Institution Persona</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Student readiness, industry skill demand matrix & placement outcomes</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Roll No lookup, student readiness search & demand matrix</div>
                 </div>
               </button>
 
@@ -264,7 +288,7 @@ export default function App() {
               >
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>Industry Persona</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Publish opportunities, discover skill-matched candidates & collaborate</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Publish challenges & opportunities, evaluate candidate code</div>
                 </div>
               </button>
             </div>
