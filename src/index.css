@@ -79,8 +79,21 @@ button {
 
 .max-width-wrapper {
   max-width: 1240px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 3rem;
+}
+
+@media (max-width: 1280px) {
+  .max-width-wrapper {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .max-width-wrapper {
+    padding: 0 1.5rem;
+  }
 }
 
 @media (max-width: 640px) {

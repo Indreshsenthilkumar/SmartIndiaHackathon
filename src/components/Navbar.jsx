@@ -19,41 +19,24 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
       top: 0,
       zIndex: 900
     }}>
-      <div className="max-width-wrapper" style={{
+      <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '68px'
+        height: '74px',
+        width: '100%',
+        padding: '0 3.5rem'
       }}>
-        {/* Brand Logo */}
+        {/* Ministry of Ayush & AIIA Official Logo */}
         <div 
           onClick={() => handleNav('/')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', cursor: 'pointer', userSelect: 'none' }}
+          style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', userSelect: 'none' }}
         >
-          <div style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)',
-            color: '#FFFFFF',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 800,
-            fontSize: '1.15rem',
-            letterSpacing: '-0.03em',
-            boxShadow: '0 2px 4px 0 rgba(37, 99, 235, 0.25)'
-          }}>
-            A
-          </div>
-          <div>
-            <div style={{ fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.03em', color: 'var(--text-main)', lineHeight: 1 }}>
-              ALIGN
-            </div>
-            <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--accent-primary)', letterSpacing: '0.06em', marginTop: '0.15rem' }}>
-              ACADEMIA × INDUSTRY
-            </div>
-          </div>
+          <img 
+            src="/ayush-logo.png" 
+            alt="Ministry of Ayush - All India Institute of Ayurveda" 
+            style={{ height: '52px', width: 'auto', objectFit: 'contain' }}
+          />
         </div>
 
         {/* Desktop Navigation Links */}
@@ -114,7 +97,8 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
             <button
               onClick={() => handleNav(
                 currentRole === 'student' ? '/student' :
-                currentRole === 'institution' ? '/institution' : '/industry-dashboard'
+                currentRole === 'institution' ? '/institution' :
+                currentRole === 'academician' ? '/academician' : '/industry-dashboard'
               )}
               className="btn btn-secondary btn-sm"
               style={{
@@ -128,7 +112,8 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
             >
               <Compass size={15} />
               {currentRole === 'student' ? 'Student Workspace' :
-               currentRole === 'institution' ? 'Institution Analytics' : 'Industry Pipeline'}
+               currentRole === 'institution' ? 'Institution Analytics' :
+               currentRole === 'academician' ? 'Academician Workspace' : 'Industry Pipeline'}
             </button>
           ) : (
             <button
@@ -232,7 +217,7 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
             className={`nav-link ${currentRoute === '/about' ? 'active' : ''}`}
             style={{ width: '100%', justifyContent: 'flex-start', padding: '0.65rem 0.85rem' }}
           >
-            About ALIGN
+            About Portal
           </button>
         </div>
       )}

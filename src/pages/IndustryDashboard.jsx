@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Briefcase, Users, Building2, PlusCircle, CheckCircle2, ArrowRight, MapPin, DollarSign, Search, ShieldCheck, Target, Award, Code2 } from 'lucide-react';
+import { Briefcase, Users, Building2, PlusCircle, CheckCircle2, ArrowRight, MapPin, DollarSign, Search, ShieldCheck, Target, Award, Code2, GraduationCap, FileText, Download } from 'lucide-react';
 import MobileBottomNav from '../components/MobileBottomNav';
 
 export default function IndustryDashboard({ industry, opportunities, challenges, onAddOpportunity, onAddChallenge, onNavigate }) {
-  const [activeTab, setActiveTab] = useState('overview'); // overview, post, challenges, candidates, collaborations
+  const [activeTab, setActiveTab] = useState('overview'); // overview, post, challenges, candidates, collaborations, academicians
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -191,7 +191,8 @@ export default function IndustryDashboard({ industry, opportunities, challenges,
               { id: 'challenges', label: 'Industry Challenge Manager', icon: Target },
               { id: 'post', label: 'Create Opportunity', icon: PlusCircle },
               { id: 'candidates', label: 'Candidate Discovery', icon: Users },
-              { id: 'collaborations', label: 'Institutional Collaborations', icon: Building2 }
+              { id: 'collaborations', label: 'Institutional Collaborations', icon: Building2 },
+              { id: 'academicians', label: 'Faculty Sabbaticals & FDP Co-Host', icon: GraduationCap }
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -490,6 +491,67 @@ export default function IndustryDashboard({ industry, opportunities, challenges,
                   </button>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+        {/* Tab: Faculty Sabbaticals & FDP Co-Host */}
+        {activeTab === 'academicians' && (
+          <div className="card" style={{ padding: '1.75rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div>
+                <span className="eyebrow">FACULTY SABBATICALS & JOINT FDP MANAGEMENT</span>
+                <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.2rem' }}>
+                  Industry Academician Sabbaticals & FDP Co-Management
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                  Mentor visiting faculty, review micro-teaching submissions, co-publish research grants, and issue AICTE-ATAL verified certificates.
+                </p>
+              </div>
+
+              <button className="btn btn-primary btn-sm" onClick={() => alert("Launching Joint FDP Program Publisher...")}>
+                + Publish Joint FDP Call
+              </button>
+            </div>
+
+            {/* Sabbatical Researcher Card */}
+            <div style={{ padding: '1.25rem', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>
+                    <GraduationCap size={24} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-main)' }}>Dr. Radhakrishnan V</div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Visiting Research Faculty · All India Institute of Ayurveda</div>
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <span className="badge badge-teal">Industrial Sabbatical Complete</span>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: '0.35rem' }}>Industry Mentor: Dr. Vikram Seth</div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Logged Industry Mentor Review (5.0 / 5.0 Rating):
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                  "Dr. Radhakrishnan co-developed our clinical telemetry data algorithms, authored 2 Scopus papers, and integrated our R&D workflow into the university's 3rd year engineering elective syllabus."
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                <button className="btn btn-secondary btn-sm" onClick={() => alert("Reviewing Micro-Teaching Video & Lesson Feedback Log...")}>
+                  <FileText size={14} /> Review Micro-Teaching Log
+                </button>
+                <button className="btn btn-secondary btn-sm" onClick={() => alert("Reviewing DST/AICTE Research Grant Proposal Draft...")}>
+                  <ShieldCheck size={14} /> Review DST Grant Draft
+                </button>
+                <button className="btn btn-primary btn-sm" onClick={() => alert("Re-issuing Verified AICTE-ATAL Certificate PDF...")}>
+                  <Download size={14} /> View Issued Certificate
+                </button>
+              </div>
             </div>
           </div>
         )}

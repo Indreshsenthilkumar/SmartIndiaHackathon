@@ -145,10 +145,12 @@ export default function StudentDashboard({ student, opportunities, challenges, a
               { id: 'overview', label: 'Overview', icon: Compass },
               { id: 'twin', label: 'Competency Twin & GitHub', icon: Cpu },
               { id: 'profile', label: 'Skill Profile', icon: Award },
-              { id: 'gaps', label: 'Skill Gaps', icon: CheckSquare },
+              { id: 'gaps', label: 'Career Guidance & Gaps', icon: CheckSquare },
               { id: 'challenges', label: 'Industry Challenges', icon: Target },
               { id: 'applications', label: `Applications (${student.applications.length})`, icon: FileText },
               { id: 'portfolio', label: 'Digital Portfolio', icon: User },
+              { id: 'documents', label: 'Document Vault', icon: ShieldCheck },
+              { id: 'integrations', label: 'Platform Integrations', icon: ExternalLink },
               { id: 'assessment', label: 'Take Assessment', icon: PlayCircle }
             ].map((tab) => {
               const Icon = tab.icon;
@@ -490,15 +492,36 @@ export default function StudentDashboard({ student, opportunities, challenges, a
           </div>
         )}
 
-        {/* Tab: Skill Gaps */}
+        {/* Tab: Skill Gaps & Personalized Career Guidance */}
         {activeTab === 'gaps' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
             <div>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>What should you build next?</h2>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Prioritized skill gap recommendations derived from your target role expectations.</p>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>Personalized Career Guidance & Skill Pathways</h2>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Tailored career recommendations derived from your individual skills, interests, and live industry market demand.</p>
             </div>
 
+            {/* Personalized Career Recommendation Card */}
+            <div className="card" style={{ padding: '1.5rem', backgroundColor: '#F0FDF4', border: '1px solid #99F6E4' }}>
+              <div className="eyebrow" style={{ color: '#0F766E' }}>TOP MATCHED CAREER PATHWAY</div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F766E', margin: '0.25rem 0 0.5rem 0' }}>
+                Product Analyst & Data Strategy Specialist
+              </h3>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1rem' }}>
+                Based on your strong <strong>SQL</strong> proficiency, <strong>Figma Wireframing</strong> skills, and high interest in product telemetry, you have an <strong>85% match</strong> with active listings in your region.
+              </p>
+
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <span className="badge badge-teal">Skill Alignment: 85%</span>
+                <span className="badge badge-blue">Market Demand: High (+34% Hiring Growth)</span>
+                <span className="badge badge-gray">Est. Starting Salary: ₹6.5 – ₹12.0 LPA</span>
+              </div>
+            </div>
+
+            {/* Actionable Skill Gaps List */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                Prioritized Skill Gap Action Plan
+              </h3>
               {student.skillGaps.map((gap, idx) => (
                 <div key={gap.id} className="card" style={{ padding: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem' }}>
@@ -533,7 +556,7 @@ export default function StudentDashboard({ student, opportunities, challenges, a
                     <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>
                       Action: {gap.recommendedAction}
                     </div>
-                    <button className="btn btn-primary btn-sm">
+                    <button className="btn btn-primary btn-sm" onClick={() => alert(`Starting action for ${gap.skill}!`)}>
                       Start Action
                     </button>
                   </div>
@@ -584,23 +607,208 @@ export default function StudentDashboard({ student, opportunities, challenges, a
           </div>
         )}
 
-        {/* Tab: Portfolio */}
+        {/* Tab: Digital Portfolio */}
         {activeTab === 'portfolio' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div className="card" style={{ padding: '1.75rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+            {/* Header Profile Card */}
+            <div className="card" style={{ padding: '1.75rem', background: 'linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
                 <div>
-                  <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>{student.name}</h2>
-                  <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{student.degree} · {student.institution} ({student.gradYear})</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                    <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-main)' }}>{student.name}</h2>
+                    <span className="badge badge-teal"><ShieldCheck size={14} /> Official Verified Portfolio</span>
+                  </div>
+                  <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                    {student.degree} · {student.institution} ({student.gradYear})
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginTop: '0.2rem' }}>
+                    Target Career: <strong>{student.targetCareer}</strong> · Roll No: <strong>{student.rollNumber}</strong>
+                  </div>
                 </div>
-                <span className="badge badge-teal" style={{ padding: '0.4rem 0.75rem', fontSize: '0.85rem' }}>
-                  <ShieldCheck size={16} /> University Verified Profile
-                </span>
+
+                <button className="btn btn-primary btn-sm" onClick={() => alert("Portfolio link copied to clipboard!\nhttps://align.gov.in/portfolio/2026-IT-101")}>
+                  <ExternalLink size={14} /> Share Verified Portfolio URL
+                </button>
               </div>
 
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                {student.portfolio.about}
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6, paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
+                "{student.portfolio.about}"
               </p>
+            </div>
+
+            {/* Verified Skills & Proficiencies Grid */}
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                  Verified Skills & Capability Evidence
+                </h3>
+                <span className="badge badge-blue">{student.skills.length} Assessed Skills</span>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+                {student.skills.map((skill) => (
+                  <div key={skill.id} style={{ padding: '1rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>{skill.name}</div>
+                      <span className={`badge ${skill.proficiency === 'Strong' ? 'badge-teal' : skill.proficiency === 'Developing' ? 'badge-blue' : 'badge-amber'}`}>
+                        {skill.proficiency}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.4rem' }}>
+                      <ShieldCheck size={12} color="var(--accent-primary)" /> Evidence: {skill.evidence}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Verified GitHub Projects & Code Complexity */}
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                  Verified GitHub Repositories & Code Analysis
+                </h3>
+                <span className="badge badge-teal">Static Code Analysis Verified</span>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+                {student.analyzedProjects.map((proj) => (
+                  <div key={proj.id} style={{ padding: '1.25rem', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                      <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--text-main)' }}>{proj.title}</div>
+                      <span className="badge badge-teal">Score: {proj.complexityScore}/100</span>
+                    </div>
+
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.85rem', lineHeight: 1.5 }}>
+                      {proj.summary}
+                    </p>
+
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1rem' }}>
+                      <div>Languages: <strong>{proj.languageComposition}</strong></div>
+                      <div>Contribution Share: <strong>{proj.practicalContribution}</strong></div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                      {proj.verifiedSkills.map((sk, idx) => (
+                        <span key={idx} className="badge badge-blue" style={{ fontSize: '0.72rem' }}>{sk}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Certifications & Achievements */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
+                  Industry & University Certifications
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                  {student.portfolio.certifications.map((cert) => (
+                    <div key={cert.id} style={{ padding: '0.85rem 1rem', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', backgroundColor: 'var(--bg-subtle)' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--text-main)' }}>{cert.name}</div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Issuer: {cert.issuer} · {cert.date}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', fontWeight: 600, marginTop: '0.2rem' }}>Cred ID: {cert.credentialId}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
+                  Verified Achievements & Honors
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                  {student.portfolio.achievements.map((ach, aidx) => (
+                    <div key={aidx} style={{ padding: '0.85rem 1rem', border: '1px solid #99F6E4', borderRadius: 'var(--radius-sm)', backgroundColor: '#F0FDF4' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.875rem', color: '#0F766E' }}>{ach.title}</div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Awarded: {ach.date} · Verified Badge</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab: Secure Document Vault */}
+        {activeTab === 'documents' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>Secure Document Management Vault</h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Encrypted repository for verified resumes, certificates, internship reports, and academic transcripts.</p>
+              </div>
+
+              <button className="btn btn-primary btn-sm" onClick={() => alert("Opening Secure Document Upload Modal...")}>
+                + Upload New Document
+              </button>
+            </div>
+
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <div className="table-responsive">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Document Title</th>
+                      <th>Category</th>
+                      <th>Size</th>
+                      <th>Upload Date</th>
+                      <th>Verification Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {student.portfolio.documents.map((doc) => (
+                      <tr key={doc.id}>
+                        <td style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <FileText size={16} color="var(--accent-primary)" /> {doc.title}
+                        </td>
+                        <td><span className="badge badge-gray">{doc.category}</span></td>
+                        <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{doc.size}</td>
+                        <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{doc.uploadDate}</td>
+                        <td><span className="badge badge-teal"><ShieldCheck size={12} /> {doc.status}</span></td>
+                        <td>
+                          <button className="btn btn-secondary btn-sm" style={{ padding: '0.25rem 0.65rem', fontSize: '0.78rem' }} onClick={() => alert(`Downloading verified file: ${doc.title}`)}>
+                            Download
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab: Platform & Institutional Integrations */}
+        {activeTab === 'integrations' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>Platform & Institutional Database Sync</h2>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Live API connections with Coursera, NPTEL, Google, AWS, Digilocker, and University ERP.</p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+              {student.portfolio.integrations.map((integ, iidx) => (
+                <div key={iidx} className="card" style={{ padding: '1.25rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                    <div>
+                      <span className="badge badge-blue">{integ.category}</span>
+                      <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.35rem' }}>
+                        {integ.provider}
+                      </h3>
+                    </div>
+                    <span className="badge badge-teal">{integ.status}</span>
+                  </div>
+
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginTop: '0.85rem' }}>
+                    Last API Sync: <strong>{integ.lastSync}</strong>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}

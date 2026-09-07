@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import RoleBanner from './components/RoleBanner';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import MatchModal from './components/MatchModal';
@@ -11,12 +10,13 @@ import OpportunityDetailPage from './pages/OpportunityDetailPage';
 import StudentDashboard from './pages/StudentDashboard';
 import InstitutionDashboard from './pages/InstitutionDashboard';
 import IndustryDashboard from './pages/IndustryDashboard';
+import AcademicianDashboard from './pages/AcademicianDashboard';
 import SkillsExplorePage from './pages/SkillsExplorePage';
 import ChallengesPage from './pages/ChallengesPage';
 import { StudentsPublicPage, InstitutionsPublicPage, IndustryPublicPage, AcademiciansPublicPage, AboutPage } from './pages/PublicPersonaPages';
 
 // Mock Data
-import { initialStudent, initialOpportunities, initialChallenges, institutionMetrics, industryData, assessmentQuestions } from './data/mockData';
+import { initialStudent, initialOpportunities, initialChallenges, institutionMetrics, industryData, assessmentQuestions, initialAcademician, initialAcademicianOpportunities } from './data/mockData';
 
 export default function App() {
   // State Management
@@ -34,6 +34,8 @@ export default function App() {
   const [challenges, setChallenges] = useState(initialChallenges);
   const [institution, setInstitution] = useState(institutionMetrics);
   const [industry, setIndustry] = useState(industryData);
+  const [academician, setAcademician] = useState(initialAcademician);
+  const [academicianOpportunities, setAcademicianOpportunities] = useState(initialAcademicianOpportunities);
 
   // Role Switcher Handler
   const handleSelectRole = (role) => {
@@ -46,6 +48,8 @@ export default function App() {
       setCurrentRoute('/institution');
     } else if (role === 'industry') {
       setCurrentRoute('/industry-dashboard');
+    } else if (role === 'academician') {
+      setCurrentRoute('/academician');
     } else {
       setCurrentRoute('/');
     }
@@ -203,6 +207,14 @@ export default function App() {
             onNavigate={handleNavigate}
           />
         );
+      case '/academician':
+        return (
+          <AcademicianDashboard
+            academician={academician}
+            academicianOpportunities={academicianOpportunities}
+            onNavigate={handleNavigate}
+          />
+        );
       default:
         return (
           <LandingPage
@@ -217,9 +229,6 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* Top Demo Banner Switcher */}
-      <RoleBanner currentRole={currentRole} onSelectRole={handleSelectRole} />
-
       {/* Primary Header */}
       <Navbar
         currentRoute={currentRoute}
@@ -289,6 +298,17 @@ export default function App() {
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>Industry Persona</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Publish challenges & opportunities, evaluate candidate code</div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => handleSelectRole('academician')}
+                className="btn btn-secondary"
+                style={{ justifyContent: 'flex-start', padding: '1rem', textAlign: 'left' }}
+              >
+                <div>
+                  <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>Academician Persona</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>FDP Programs, sabbaticals, micro-teaching & AICTE certificates</div>
                 </div>
               </button>
             </div>

@@ -157,7 +157,8 @@ export const initialStudent = {
         description: "Built an interactive product telemetry mock dashboard evaluating user retention funnels.",
         skills: ["SQL", "Figma", "Excel"],
         link: "github.com/demo/engagement-dash",
-        verified: true
+        verified: true,
+        complexityScore: 84
       },
       {
         id: "p-2",
@@ -165,7 +166,8 @@ export const initialStudent = {
         description: "Analyzed 50k transaction records using Python & SQL to identify customer drop-off patterns.",
         skills: ["Python", "SQL", "Excel"],
         link: "github.com/demo/cohort-analysis",
-        verified: true
+        verified: true,
+        complexityScore: 88
       }
     ],
     certifications: [
@@ -180,10 +182,18 @@ export const initialStudent = {
       {
         id: "c-2",
         name: "SQL for Data Science & Business Intelligence",
-        issuer: "University Consortium",
+        issuer: "University Consortium / NPTEL",
         date: "Mar 2026",
         verified: true,
         credentialId: "CERT-UC-44021"
+      },
+      {
+        id: "c-3",
+        name: "AICTE-ATAL Machine Learning & Data Telemetry",
+        issuer: "AICTE-ATAL / AIIA",
+        date: "Aug 2026",
+        verified: true,
+        credentialId: "CERT-ATAL-2026-99"
       }
     ],
     experiences: [
@@ -194,6 +204,29 @@ export const initialStudent = {
         period: "Jan 2026 – May 2026",
         details: "Synthesized feedback from 400+ students to iterate campus mobile portal navigation specs."
       }
+    ],
+    achievements: [
+      { title: "National Ayush Tech Hackathon 2026 — Top 5% Finalist", date: "Jul 2026", verified: true },
+      { title: "Competency Twin High Build Score Badge (88/100)", date: "Aug 2026", verified: true },
+      { title: "Published Open-Source Cohort Analysis Case Study", date: "May 2026", verified: true }
+    ],
+
+    // Secure Document Management Vault
+    documents: [
+      { id: "doc-1", title: "Indresh_S_Product_Analytics_Resume_2026.pdf", category: "Resume", size: "245 KB", uploadDate: "01 Sep 2026", status: "Verified & Encrypted", icon: "FileText" },
+      { id: "doc-2", title: "Google_Data_Analytics_Credential_Cert.pdf", category: "Certification", size: "512 KB", uploadDate: "15 May 2026", status: "Issuer Verified", icon: "Award" },
+      { id: "doc-3", title: "Campus_Innovation_Lab_Internship_Completion_Report.pdf", category: "Internship Report", size: "1.2 MB", uploadDate: "05 Jun 2026", status: "Industry Signed", icon: "Briefcase" },
+      { id: "doc-4", title: "BTech_IT_Semester_1_to_6_Official_Transcripts.pdf", category: "Academic Transcript", size: "2.4 MB", uploadDate: "10 Aug 2026", status: "Digilocker Verified", icon: "ShieldCheck" }
+    ],
+
+    // Platform & Institutional Integrations
+    integrations: [
+      { provider: "Coursera", category: "Learning Platform", status: "Active Sync", lastSync: "2 hours ago", logo: "Coursera" },
+      { provider: "NPTEL / Swayam", category: "Learning Platform", status: "Active Sync", lastSync: "Yesterday", logo: "NPTEL" },
+      { provider: "Google Career Certificates", category: "Certification Provider", status: "Verified Feed", lastSync: "Connected", logo: "Google" },
+      { provider: "AWS Academy", category: "Certification Provider", status: "Verified Feed", lastSync: "Connected", logo: "AWS" },
+      { provider: "Digilocker National Repository", category: "Institutional Database", status: "Official API Verified", lastSync: "Connected", logo: "Digilocker" },
+      { provider: "University ERP System", category: "Institutional Database", status: "Active Student Sync", lastSync: "Real-Time", logo: "University" }
     ]
   }
 };
@@ -679,6 +712,67 @@ export const institutionMetrics = {
       { department: "Electronics & Comm", enrolled: 160, assessed: 148, ready: 54, activeInterns: 28 },
       { department: "Mechanical Engg", enrolled: 120, assessed: 120, ready: 32, activeInterns: 14 }
     ]
+  },
+
+  // Detailed Skill Mastery Heatmap Analytics across Departments
+  departmentSkillHeatmap: [
+    { department: "Information Technology", sql: 78, python: 82, cloud: 62, analytics: 74, communication: 86 },
+    { department: "Computer Science", sql: 88, python: 94, cloud: 76, analytics: 68, communication: 82 },
+    { department: "Electronics & Comm", sql: 54, python: 72, cloud: 58, analytics: 48, communication: 78 },
+    { department: "Data Science & AI", sql: 92, python: 96, cloud: 70, analytics: 90, communication: 84 }
+  ],
+
+  // Detailed Internship Participation Pipeline Metrics
+  internshipPipeline: [
+    { stage: "Applied & Profile Sent", count: 320, color: "#64748B" },
+    { stage: "Shortlisted for Test", count: 180, color: "#2563EB" },
+    { stage: "Technical Interviewing", count: 110, color: "#D97706" },
+    { stage: "Active Industry Interns", count: 86, color: "#0D9488" },
+    { stage: "PPO Offered / Completed", count: 140, color: "#16A34A" }
+  ],
+
+  // Detailed Stipend Distribution Analytics
+  stipendAnalytics: {
+    topBracket: { range: "> ₹30,000 / mo", count: 28, percentage: "24%" },
+    midBracket: { range: "₹15,000 – ₹30,000 / mo", count: 68, percentage: "58%" },
+    entryBracket: { range: "< ₹15,000 / mo", count: 21, percentage: "18%" },
+    averageStipend: "₹24,500 / mo",
+    highestStipend: "₹65,000 / mo (Meridian Biotech)"
+  },
+
+  // Industry Employer Satisfaction Index
+  employerSatisfaction: {
+    overallRating: "4.85 / 5.0",
+    partnerCount: 14,
+    feedback: [
+      { partner: "Meridian Digital", rating: "5.0 / 5.0", comment: "Students demonstrate strong SQL and problem-solving readiness with minimal onboarding delay." },
+      { partner: "Vertex Systems", rating: "4.8 / 5.0", comment: "High capability in microservices and container log debugging." },
+      { partner: "Kite Studios", rating: "4.7 / 5.0", comment: "Product design specs delivered by student interns met enterprise Figma wireframe standards." }
+    ]
+  },
+
+  // 5 Pillars of Industry-Academia Collaboration Programs
+  collaborationPrograms: {
+    mentorships: [
+      { id: "m-1", title: "1-on-1 Senior Industry Architect Mentorship", mentor: "Dr. Vikram Seth (Meridian Digital)", menteesCount: 24, focus: "Data Engineering & Analytics" },
+      { id: "m-2", title: "Product Analytics & UX Strategy Mentorship", mentor: "Priya Nair (Kite Studios)", menteesCount: 18, focus: "Wireframing & Telemetry" }
+    ],
+    workshops: [
+      { id: "w-1", title: "Cloud Microservices & Docker Container Lab", instructor: "Vertex Cloud Engineering Team", date: "18 Sep 2026", participants: 140 },
+      { id: "w-2", title: "Hands-on GenAI in Healthcare & Ayush Tech", instructor: "AIIA & Meridian AI Leads", date: "25 Sep 2026", participants: 210 }
+    ],
+    guestLectures: [
+      { id: "gl-1", title: "Keynote: Transitioning Academic Code into Production Microservices", speaker: "Anand Prakash (VP Engg, Vertex Systems)", date: "12 Sep 2026", status: "Upcoming Stream" },
+      { id: "gl-2", title: "Keynote: Phytomedicine Data Science & Scopus Grant Writing", speaker: "Dr. A. Sharma (AICTE Fellow)", date: "20 Sep 2026", status: "Upcoming Stream" }
+    ],
+    innovationChallenges: [
+      { id: "ic-1", title: "Enterprise Cohort Retention Data Pipeline", partner: "Meridian Digital", reward: "₹25,000 Prize + Fast-Track Shortlist", status: "Active Submissions" },
+      { id: "ic-2", title: "Campus Mobile Portal UX Teardown", partner: "Kite Studios", reward: "Verified UX Badge + Internship Shortlist", status: "Active Submissions" }
+    ],
+    liveProjects: [
+      { id: "lp-1", title: "Patient Telemetry Anomaly Detection Engine", company: "Meridian Digital R&D", studentTeamSize: 4, leadFaculty: "Dr. Radhakrishnan V", milestone: "Sprint 3: Model Tuning" },
+      { id: "lp-2", title: "Container Log Parsing Daemon for Kubernetes", company: "Vertex Systems", studentTeamSize: 3, leadFaculty: "Dr. Anitha S", milestone: "Sprint 2: Async Pipeline" }
+    ]
   }
 };
 
@@ -876,3 +970,156 @@ export const assessmentQuestions = [
     ]
   }
 ];
+
+// Academician / Faculty Persona Dataset
+export const initialAcademician = {
+  id: "prof-201",
+  name: "Dr. Radhakrishnan V",
+  title: "Dr. Radhakrishnan V",
+  designation: "Associate Professor & Head of Ayush Tech Research",
+  department: "Ayurvedic Computer Sciences & Healthcare Tech",
+  institution: "All India Institute of Ayurveda (AIIA)",
+  email: "radhakrishnan.v@aiia.gov.in",
+  specialization: "AI in Health Tech, Phytomedicine Analytics, OBE Curriculum Design",
+  experienceYears: "14 Years",
+  readinessIndex: 91,
+
+  // Competency Twin for Faculty
+  facultyTwin: {
+    researchOutputScore: 89,
+    industryImmersionScore: 92,
+    pedagogyObeScore: 94,
+    scopusPublicationsCount: 16,
+    patentsFiledCount: 3,
+    grantFundingRaised: "₹45,00,000"
+  },
+
+  // Active FDP (Faculty Development Program)
+  activeFdp: {
+    id: "fdp-101",
+    title: "AICTE-ATAL Advanced FDP: Machine Learning & Phytomedicine Analytics",
+    organizer: "All India Institute of Ayurveda & Meridian Biotech R&D",
+    startDate: "01 Sep 2026",
+    endDate: "14 Sep 2026",
+    status: "In Progress (Week 2)",
+    attendancePercentage: 92,
+    currentPhase: "Research & Grant Proposal Drafting",
+    quizScoreAverage: 88,
+    finalExamStatus: "Eligible (Score: 84%)",
+    certificateStatus: "Verified & Issued (AICTE-ATAL Aligned)",
+    
+    // Pillar 1: Daily Activities & Learning Sessions
+    dailyActivities: [
+      { day: "Day 1", topic: "Expert Lecture: Modern AI & Machine Learning Trends in Ayush Medicine", status: "Completed", speaker: "Dr. A. Sharma (AICTE Senior Fellow)" },
+      { day: "Day 2", topic: "Hands-On Lab Work: Python & Bio-informatics Toolkit for Phytomedicine", status: "Completed", mentor: "Meridian R&D Team" },
+      { day: "Day 3", topic: "Case Study Discussion: Clinical Efficacy & Telemetry Funnels in Herbal Formulations", status: "Completed", lead: "Clinical Industry Expert" },
+      { day: "Day 4", topic: "Micro-Teaching Session: Peer-reviewed 15-min sample lesson on Bio-SQL & AI Data Analytics", status: "Verified & Evaluated (Score: 92/100)", feedback: "Exceptional clarity in explaining algorithmic data structures to undergraduate students." }
+    ],
+
+    // Pillar 2: Upgrading Teaching Methods (Pedagogical Training)
+    pedagogicalTraining: [
+      { module: "Digital LMS & Virtual Labs", tool: "Moodle, Google Classroom & Virtual Bio-Simulators", status: "Completed", score: "Pass" },
+      { module: "Outcome-Based Education (OBE) & Bloom's Taxonomy", framework: "Designing Student-Centric Exam Question Papers & Mapping CO-PO Attainment", status: "Completed", score: "Verified (Strong)" }
+    ],
+
+    // Pillar 3: Research and Academic Writing
+    researchAndWriting: [
+      { title: "Scopus & Web of Science Paper Drafting", paperTopic: "Machine Learning Models for Predicting Phytochemical Synergy in Herbal Formulations", status: "Draft Submitted", journal: "Journal of Ethnopharmacology & Tech" },
+      { title: "Government Grant Proposal Drafting", agency: "DST & AICTE Research Promotion Scheme (RPS)", status: "Approved by Industry Mentor", grantAmount: "₹25,00,000" },
+      { title: "IPR & Patent Filing", patentName: "Automated Spectroscopic Assay Analysis Algorithm", status: "Provisional Patent Drafted" }
+    ],
+
+    // Pillar 4: Evaluation and Certification
+    evaluationAndCertification: {
+      quizzes: [
+        { title: "Quiz 1: Phytomedicine & AI Data Structures", score: 90, total: 100, date: "03 Sep 2026", status: "Passed" },
+        { title: "Quiz 2: OBE & Outcome Question Paper Design", score: 85, total: 100, date: "07 Sep 2026", status: "Passed" },
+        { title: "Quiz 3: Scopus Paper Methodology & Grant Standards", score: 90, total: 100, date: "10 Sep 2026", status: "Passed" }
+      ],
+      finalExamScore: 84,
+      minPassingThreshold: 60,
+      attendanceRecord: "92% (11 of 12 sessions attended)",
+      certificateIssued: true,
+      certificateId: "AICTE-ATAL-FDP-2026-AYUSH-9942",
+      issuedBy: "All India Institute of Ayurveda & Meridian Digital"
+    }
+  },
+
+  // Sabbaticals & Industrial Training Records
+  sabbaticalsAndInternships: [
+    {
+      id: "sab-1",
+      title: "Industrial Sabbatical: Healthcare Data Science & Clinical Analytics",
+      company: "Meridian Digital Labs",
+      location: "Chennai · Hybrid",
+      duration: "6 Months",
+      period: "Jan 2026 – Jun 2026",
+      status: "Completed & Verified",
+      mentor: "Dr. Vikram Seth (Chief Data Scientist, Meridian)",
+      mentorFeedback: "Dr. Radhakrishnan demonstrated outstanding technical leadership during his sabbatical. He co-developed our clinical trial telemetry algorithms and designed a bridge elective for undergraduate IT students.",
+      rating: "5.0 / 5.0",
+      outcomes: [
+        "Co-authored 2 Scopus-indexed research papers",
+        "Designed 1 Joint Industry-Academia Elective Course",
+        "Trained 45 Junior Faculty Members across partner institutions"
+      ]
+    },
+    {
+      id: "sab-2",
+      title: "Faculty Industrial Training: Cloud Systems & Linux Security",
+      company: "Vertex Systems R&D",
+      location: "Hyderabad · On-site",
+      duration: "4 Weeks",
+      period: "May 2025",
+      status: "Completed & Verified",
+      mentor: "Anand Prakash (Principal Architect)",
+      mentorFeedback: "Strong engagement with microservices log telemetry and container orchestration frameworks.",
+      rating: "4.9 / 5.0",
+      outcomes: [
+        "Upgraded Institution Cloud Computing Lab syllabus",
+        "Published 1 Technical Whitepaper on Container Security"
+      ]
+    }
+  ]
+};
+
+// Opportunities List for Academicians
+export const initialAcademicianOpportunities = [
+  {
+    id: "opp-acad-1",
+    title: "AICTE-ATAL Advanced FDP on Machine Learning & Digital Health Technologies",
+    provider: "All India Institute of Ayurveda & Meridian Biotech",
+    type: "FDP Program",
+    duration: "2 Weeks (Online + Hands-on)",
+    stipendOrGrant: "AICTE Sponsored & Certified",
+    eligibility: "Engineering, Pharmacy & Ayush Faculty Members",
+    deadline: "15 Sep 2026",
+    description: "Intensive 2-week Faculty Development Program covering expert lectures, micro-teaching feedback, Scopus paper writing, DST grant proposal drafting, and AICTE-ATAL certification.",
+    tags: ["FDP", "Machine Learning", "OBE Framework", "Scopus Paper"]
+  },
+  {
+    id: "opp-acad-2",
+    title: "6-Month Industrial Research Sabbatical in Healthcare Analytics",
+    provider: "Meridian Digital R&D Division",
+    type: "Industrial Sabbatical",
+    duration: "6 Months (Full-Time or Hybrid)",
+    stipendOrGrant: "₹65,00,00 Grant / Research Fellowship",
+    eligibility: "Associate Professors & Professors with 5+ years experience",
+    deadline: "30 Sep 2026",
+    description: "Work side-by-side with Meridian R&D leads on real-world patient telemetry datasets, co-file patents, and bring industry best practices back to academic curricula.",
+    tags: ["Sabbatical", "Industry Immersion", "Patents", "R&D"]
+  },
+  {
+    id: "opp-acad-3",
+    title: "Faculty Industrial Training: Cloud & Microservices Infrastructure",
+    provider: "Vertex Systems Infrastructure Lab",
+    type: "Industrial Training",
+    duration: "4 Weeks (Summer Break)",
+    stipendOrGrant: "Fully Sponsored + Honorarium",
+    eligibility: "CS, IT & Electronics Faculty",
+    deadline: "20 Oct 2026",
+    description: "Hands-on industrial immersion on Linux kernel debugging, Docker container log parsing, and enterprise cloud DevOps practices.",
+    tags: ["Industrial Training", "Cloud & Linux", "Hands-on Lab"]
+  }
+];
+

@@ -89,11 +89,17 @@ export function AcademiciansPublicPage({ onNavigate }) {
       <div className="max-width-wrapper" style={{ maxWidth: '850px' }}>
         <div className="eyebrow">FOR ACADEMICIANS & FACULTY</div>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em', marginBottom: '1rem' }}>
-          Industry Engagement for University Faculty
+          Industry Engagement, FDPs & Sabbaticals for Faculty
         </h1>
-        <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
-          Connect with industry partners for Faculty Development Programs (FDP), industrial training, research collaborations, and consultancy projects.
+        <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+          Connect with industry partners for Faculty Development Programs (FDP), industrial sabbaticals, research grants (DST/AICTE), micro-teaching labs, and AICTE-ATAL verified certifications.
         </p>
+
+        <div style={{ marginBottom: '2.5rem' }}>
+          <button className="btn btn-primary" onClick={() => onNavigate('/academician')}>
+            Enter Academician Workspace & FDP Hub →
+          </button>
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
           <div className="card" style={{ padding: '1.5rem' }}>

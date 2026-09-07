@@ -7,39 +7,28 @@ export default function Footer({ onNavigate }) {
       backgroundColor: '#FFFFFF',
       borderTop: '1px solid var(--border-subtle)',
       padding: '3.5rem 0 2rem 0',
-      color: 'var(--text-muted)'
+      color: 'var(--text-muted)',
+      width: '100%'
     }}>
-      <div className="max-width-wrapper">
+      <div style={{ width: '100%', padding: '0 3.5rem' }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
           gap: '2.5rem',
           marginBottom: '3rem'
         }}>
-          {/* Column 1: Brand & Principles */}
+          {/* Column 1: Official Logo & Principles */}
           <div style={{ gridColumn: 'span 2' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
-              <div style={{
-                width: '28px',
-                height: '28px',
-                borderRadius: '8px',
-                backgroundColor: 'var(--accent-primary)',
-                color: '#FFFFFF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 800,
-                fontSize: '0.9rem'
-              }}>
-                A
-              </div>
-              <span style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
-                ALIGN
-              </span>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <img 
+                src="/ayush-logo.png" 
+                alt="Ministry of Ayush - All India Institute of Ayurveda" 
+                style={{ height: '56px', width: 'auto', objectFit: 'contain' }}
+              />
             </div>
 
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', maxWidth: '420px', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-              A shared platform for students, educational institutions, and industry partners to measure readiness, identify skill gaps, and connect learning to real-world opportunities.
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', maxWidth: '440px', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+              A centralized skill intelligence and opportunity portal connecting students, educational institutions, and industry partners under the Ministry of Ayush & All India Institute of Ayurveda initiative.
             </p>
 
             <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-main)' }}>
@@ -67,13 +56,18 @@ export default function Footer({ onNavigate }) {
                 </button>
               </li>
               <li>
+                <button onClick={() => onNavigate('/challenges')} style={{ border: 'none', background: 'none', color: 'inherit', cursor: 'pointer' }}>
+                  Industry Challenges
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onNavigate('/skills')} style={{ border: 'none', background: 'none', color: 'inherit', cursor: 'pointer' }}>
                   Skills & Pathways
                 </button>
               </li>
               <li>
                 <button onClick={() => onNavigate('/about')} style={{ border: 'none', background: 'none', color: 'inherit', cursor: 'pointer' }}>
-                  About ALIGN
+                  About Portal
                 </button>
               </li>
             </ul>
@@ -122,7 +116,7 @@ export default function Footer({ onNavigate }) {
           color: 'var(--text-light)'
         }}>
           <div>
-            © 2026 ALIGN — Academia–Industry Skill & Opportunity Network. All rights reserved.
+            © 2026 Ministry of Ayush — All India Institute of Ayurveda. All rights reserved.
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--bg-subtle)', padding: '0.25rem 0.65rem', borderRadius: '6px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#0D9488' }}></span>

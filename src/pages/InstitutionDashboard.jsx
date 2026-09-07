@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Building2, BarChart2, Briefcase, Award, CheckCircle2, AlertCircle, ArrowRight, Filter, Users, Search, UserCheck } from 'lucide-react';
+import { Building2, BarChart2, Briefcase, Award, CheckCircle2, AlertCircle, ArrowRight, Filter, Users, Search, UserCheck, GraduationCap, Download, FileText } from 'lucide-react';
 import MobileBottomNav from '../components/MobileBottomNav';
 import StudentReadinessSearchModal from '../components/StudentReadinessSearchModal';
 
 export default function InstitutionDashboard({ institution, onNavigate }) {
-  const [activeTab, setActiveTab] = useState('overview'); // overview, readiness, demand, outcomes
+  const [activeTab, setActiveTab] = useState('overview'); // overview, readiness, demand, outcomes, faculty
   const [selectedDept, setSelectedDept] = useState('All');
   const [searchModalRollNo, setSearchModalRollNo] = useState(null);
 
@@ -50,7 +50,10 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
               { id: 'overview', label: 'Overview', icon: Building2 },
               { id: 'readiness', label: 'Student Readiness & Search', icon: BarChart2 },
               { id: 'demand', label: 'Industry Skill Demand', icon: Briefcase },
-              { id: 'outcomes', label: 'Placement & Internship Outcomes', icon: Award }
+              { id: 'outcomes', label: 'Detailed Placement & Analytics', icon: Award },
+              { id: 'collaboration', label: 'Industry-Academia Collaboration', icon: Users },
+              { id: 'faculty', label: 'Faculty FDP & Sabbaticals', icon: GraduationCap },
+              { id: 'policy', label: 'Policymaker Skill Intelligence', icon: ShieldCheck }
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -404,14 +407,15 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
           </div>
         )}
 
-        {/* Tab 4: Outcomes */}
+        {/* Tab 4: Outcomes & Detailed Analytics */}
         {activeTab === 'outcomes' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
             <div>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>Placement & Internship Outcomes</h2>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Historical trajectory and current batch outcome progress.</p>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>Placement & Skill Analytics Deep-Dive</h2>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Granular department skill heatmaps, internship participation pipelines, stipend distributions, and employer satisfaction ratings.</p>
             </div>
 
+            {/* Placement Trajectory Chart */}
             <div className="card" style={{ padding: '1.5rem' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1.25rem' }}>
                 Year-on-Year Placement Rate Trajectory
@@ -436,6 +440,393 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Department Skill Mastery Heatmap Table */}
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                  Department-Wise Skill Mastery Heatmap (%)
+                </h3>
+                <span className="badge badge-teal">Real-Time Benchmark Analytics</span>
+              </div>
+
+              <div className="table-responsive">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Department</th>
+                      <th>SQL Querying</th>
+                      <th>Python</th>
+                      <th>Cloud Infrastructure</th>
+                      <th>Product Analytics</th>
+                      <th>Communication</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {institution.departmentSkillHeatmap.map((row, rindex) => (
+                      <tr key={rindex}>
+                        <td style={{ fontWeight: 700 }}>{row.department}</td>
+                        <td><span className={`badge ${row.sql >= 80 ? 'badge-teal' : row.sql >= 60 ? 'badge-blue' : 'badge-amber'}`}>{row.sql}%</span></td>
+                        <td><span className={`badge ${row.python >= 80 ? 'badge-teal' : row.python >= 60 ? 'badge-blue' : 'badge-amber'}`}>{row.python}%</span></td>
+                        <td><span className={`badge ${row.cloud >= 80 ? 'badge-teal' : row.cloud >= 60 ? 'badge-blue' : 'badge-amber'}`}>{row.cloud}%</span></td>
+                        <td><span className={`badge ${row.analytics >= 80 ? 'badge-teal' : row.analytics >= 60 ? 'badge-blue' : 'badge-amber'}`}>{row.analytics}%</span></td>
+                        <td><span className={`badge ${row.communication >= 80 ? 'badge-teal' : row.communication >= 60 ? 'badge-blue' : 'badge-amber'}`}>{row.communication}%</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Two-Column Grid: Internship Participation Pipeline & Stipend Analytics */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+              {/* Internship Participation Funnel */}
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
+                  Internship Participation Funnel Analytics
+                </h3>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                  {institution.internshipPipeline.map((pipe, pidx) => (
+                    <div key={pidx}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.825rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '0.25rem' }}>
+                        <span>{pipe.stage}</span>
+                        <span>{pipe.count} Students</span>
+                      </div>
+                      <div style={{ height: '8px', backgroundColor: 'var(--bg-subtle)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div style={{ width: `${(pipe.count / 320) * 100}%`, backgroundColor: pipe.color, height: '100%' }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stipend Distribution Analytics */}
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
+                  Internship Stipend Distribution
+                </h3>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ padding: '0.85rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Average Stipend</div>
+                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--accent-primary)' }}>{institution.stipendAnalytics.averageStipend}</div>
+                  </div>
+                  <div style={{ padding: '0.85rem', backgroundColor: '#F0FDF4', borderRadius: 'var(--radius-sm)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Highest Stipend</div>
+                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0D9488' }}>{institution.stipendAnalytics.highestStipend}</div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.85rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Top Bracket ({institution.stipendAnalytics.topBracket.range})</span>
+                    <strong>{institution.stipendAnalytics.topBracket.count} Students ({institution.stipendAnalytics.topBracket.percentage})</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Mid Bracket ({institution.stipendAnalytics.midBracket.range})</span>
+                    <strong>{institution.stipendAnalytics.midBracket.count} Students ({institution.stipendAnalytics.midBracket.percentage})</strong>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Entry Bracket ({institution.stipendAnalytics.entryBracket.range})</span>
+                    <strong>{institution.stipendAnalytics.entryBracket.count} Students ({institution.stipendAnalytics.entryBracket.percentage})</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Employer Satisfaction Index */}
+            <div className="card" style={{ padding: '1.5rem', backgroundColor: '#FFFFFF' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                    Employer Satisfaction Index
+                  </h3>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Based on evaluations from 14 verified industry partners</div>
+                </div>
+                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0D9488' }}>
+                  {institution.employerSatisfaction.overallRating}
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+                {institution.employerSatisfaction.feedback.map((fb, fidx) => (
+                  <div key={fidx} style={{ padding: '1rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: '0.875rem', marginBottom: '0.35rem' }}>
+                      <span>{fb.partner}</span>
+                      <span style={{ color: '#0D9488' }}>{fb.rating}</span>
+                    </div>
+                    <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                      "{fb.comment}"
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 5: Industry-Academia Collaboration Hub */}
+        {activeTab === 'collaboration' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <span className="eyebrow">5 PILLARS OF COLLABORATION</span>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.2rem' }}>
+                  Industry–Academia Collaboration Hub
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                  Mentorship programs, hands-on workshops, keynote guest lectures, innovation challenges, and live enterprise projects.
+                </p>
+              </div>
+
+              <button className="btn btn-primary btn-sm" onClick={() => alert("Launching Collaboration Program Publisher...")}>
+                + Launch New Joint Program
+              </button>
+            </div>
+
+            {/* 5 Collaboration Pillars */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+              {/* Mentorship Programs */}
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <div className="badge badge-blue" style={{ marginBottom: '0.5rem' }}>Pillar 1 · Mentorship Programs</div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                  1-on-1 Senior Industry Architect Mentorship
+                </h3>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                  Mentors: <strong>Dr. Vikram Seth (Meridian) & Priya Nair (Kite)</strong>
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '1rem' }}>
+                  Active Mentees: <strong>42 Students & Junior Faculty</strong>
+                </div>
+                <button className="btn btn-secondary btn-sm" style={{ width: '100%' }} onClick={() => alert("Viewing Mentorship Schedule & Feedback Logs...")}>
+                  View Mentorship Schedule
+                </button>
+              </div>
+
+              {/* Workshops & Bootcamps */}
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <div className="badge badge-teal" style={{ marginBottom: '0.5rem' }}>Pillar 2 · Technical Workshops</div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                  Cloud Microservices & GenAI Workshops
+                </h3>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                  Instructors: <strong>Vertex Cloud Leads & AIIA Research Faculty</strong>
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '1rem' }}>
+                  Total Participants Registered: <strong>350 Students</strong>
+                </div>
+                <button className="btn btn-secondary btn-sm" style={{ width: '100%' }} onClick={() => alert("Viewing Workshop Materials & Attendance Logs...")}>
+                  Manage Workshop Roster
+                </button>
+              </div>
+
+              {/* Guest Lectures */}
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <div className="badge badge-blue" style={{ marginBottom: '0.5rem' }}>Pillar 3 · Guest Lectures</div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                  Industry Keynote Series
+                </h3>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                  Keynote Speaker: <strong>Anand Prakash (VP Engg, Vertex Systems)</strong>
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '1rem' }}>
+                  Next Session: <strong>12 Sep 2026 (Live Interactive Stream)</strong>
+                </div>
+                <button className="btn btn-secondary btn-sm" style={{ width: '100%' }} onClick={() => alert("Accessing Guest Lecture Live Stream Link...")}>
+                  Join Keynote Stream
+                </button>
+              </div>
+
+              {/* Innovation Challenges */}
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <div className="badge badge-amber" style={{ marginBottom: '0.5rem' }}>Pillar 4 · Innovation Challenges</div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                  Real-World Industry Problem Statements
+                </h3>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                  Active Challenges: <strong>3 Live Problems (Meridian, Vertex, Kite)</strong>
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '1rem' }}>
+                  Submissions Evaluated: <strong>34 Verified Code Solutions</strong>
+                </div>
+                <button className="btn btn-secondary btn-sm" style={{ width: '100%' }} onClick={() => alert("Opening Innovation Challenge Submissions Review...")}>
+                  Review Challenge Submissions
+                </button>
+              </div>
+
+              {/* Live Industry Projects */}
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <div className="badge badge-teal" style={{ marginBottom: '0.5rem' }}>Pillar 5 · Live Industry Projects</div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                  Enterprise Capstone Sprint Projects
+                </h3>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                  Active Projects: <strong>Patient Telemetry Engine & Log Parser Daemon</strong>
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-light)', marginBottom: '1rem' }}>
+                  Co-Mentors: <strong>Industry Engineers & University Leads</strong>
+                </div>
+                <button className="btn btn-secondary btn-sm" style={{ width: '100%' }} onClick={() => alert("Viewing Live Capstone Sprint Tracker...")}>
+                  View Capstone Sprint Board
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* TAB 5: FACULTY FDP & SABBATICAL MANAGEMENT */}
+        {activeTab === 'faculty' && (
+          <div className="card" style={{ padding: '1.75rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div>
+                <span className="eyebrow">FACULTY DEVELOPMENT & SABBATICAL OVERSIGHT</span>
+                <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.2rem' }}>
+                  Institution Faculty FDP & Industrial Sabbatical Intelligence
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                  Monitor faculty upskilling, AICTE-ATAL FDP completions, industry mentor feedback, and co-host new FDP programs.
+                </p>
+              </div>
+
+              <button className="btn btn-primary btn-sm" onClick={() => alert("Opening FDP Co-Hosting Proposal Form with Industry Partners...")}>
+                + Co-Host FDP with Industry
+              </button>
+            </div>
+
+            {/* Faculty List */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div style={{ padding: '1.25rem', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--accent-light)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>
+                      <GraduationCap size={24} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-main)' }}>Dr. Radhakrishnan V</div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Associate Professor · Dept of Ayush Tech Research</div>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: 'right' }}>
+                    <span className="badge badge-teal">AICTE-ATAL FDP Certified</span>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: '0.35rem' }}>Readiness Index: 91/100</div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)', fontSize: '0.85rem' }}>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>Active FDP Program</div>
+                    <div style={{ fontWeight: 700, color: 'var(--text-main)', marginTop: '0.15rem' }}>Machine Learning & Phytomedicine Analytics</div>
+                    <div style={{ fontSize: '0.78rem', color: '#0D9488', marginTop: '0.1rem' }}>Attendance: 92% · Exam Score: 84%</div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>Industrial Sabbatical</div>
+                    <div style={{ fontWeight: 700, color: 'var(--text-main)', marginTop: '0.15rem' }}>Healthcare Analytics at Meridian Digital</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--accent-primary)', marginTop: '0.1rem' }}>Mentor Rating: 5.0 / 5.0</div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>Verified Credentials</div>
+                    <div style={{ fontWeight: 700, color: 'var(--text-main)', marginTop: '0.15rem' }}>16 Scopus Papers · 3 Patents</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>Cert ID: AICTE-ATAL-FDP-9942</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ padding: '1.25rem', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>
+                      <GraduationCap size={24} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-main)' }}>Dr. Anitha S</div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Assistant Professor · Dept of Computer Science</div>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: 'right' }}>
+                    <span className="badge badge-blue">Enrolled in Cloud FDP</span>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginTop: '0.35rem' }}>Readiness Index: 86/100</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* TAB 7: POLICYMAKER SKILL INTELLIGENCE */}
+        {activeTab === 'policy' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <span className="eyebrow">NATIONAL POLICYMAKER INTELLIGENCE ENGINE</span>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.2rem' }}>
+                  Macro Skill Readiness & NAAC / AICTE Accreditation Analytics
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                  Data-driven insights for educational authorities, accreditation councils, and industry policy planners.
+                </p>
+              </div>
+
+              <button className="btn btn-primary btn-sm" onClick={() => alert("Generating National Skill Intelligence Policy Report PDF...")}>
+                <Download size={14} /> Export Macro Policy Report PDF
+              </button>
+            </div>
+
+            {/* Macro KPI Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+              <div className="card" style={{ padding: '1.25rem' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>NATIONAL READINESS INDEX</div>
+                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0D9488', marginTop: '0.2rem' }}>78.4 / 100</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>240+ Participating Institutions</div>
+              </div>
+
+              <div className="card" style={{ padding: '1.25rem' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>AICTE-ATAL ALIGNMENT</div>
+                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent-primary)', marginTop: '0.2rem' }}>94%</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Full Syllabus Mapping</div>
+              </div>
+
+              <div className="card" style={{ padding: '1.25rem' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)' }}>NAAC CRITERION 3.5 MATCH</div>
+                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.2rem' }}>Grade A++</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Industry Interaction Metric</div>
+              </div>
+            </div>
+
+            {/* Regional Talent Distribution */}
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
+                Regional Student Skill Alignment Heatmap
+              </h3>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <div style={{ padding: '1rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>South Region Zone</div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0D9488', margin: '0.2rem 0' }}>82% Readiness</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Top Skills: SQL, Python, Ayush Tech</div>
+                </div>
+
+                <div style={{ padding: '1rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>West Region Zone</div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent-primary)', margin: '0.2rem 0' }}>76% Readiness</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Top Skills: Product Analytics, UX</div>
+                </div>
+
+                <div style={{ padding: '1rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>North Region Zone</div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.2rem 0' }}>74% Readiness</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Top Skills: Cloud Infrastructure, Linux</div>
+                </div>
+
+                <div style={{ padding: '1rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>East Region Zone</div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#D97706', margin: '0.2rem 0' }}>70% Readiness</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Top Skills: Data Science, Excel</div>
+                </div>
               </div>
             </div>
           </div>
