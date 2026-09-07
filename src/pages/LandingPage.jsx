@@ -116,12 +116,12 @@ export default function LandingPage({ opportunities, onNavigate, onOpenMatchModa
                   STUDENT SKILL PROFILE
                 </div>
                 <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)', marginTop: '0.1rem' }}>
-                  Indresh S · B.Tech IT 2026
+                  Indresh S · BAMS (Ayurveda) 2026
                 </div>
                 <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem', flexWrap: 'wrap' }}>
-                  <span className="badge badge-teal">✓ SQL (Developing)</span>
-                  <span className="badge badge-teal">✓ Excel (Strong)</span>
-                  <span className="badge badge-blue">✓ Communication</span>
+                  <span className="badge badge-teal">✓ Herbal HPLC (Developing)</span>
+                  <span className="badge badge-teal">✓ Phytomedicine (Strong)</span>
+                  <span className="badge badge-blue">✓ Ayush GCP</span>
                 </div>
               </div>
 
@@ -315,7 +315,7 @@ export default function LandingPage({ opportunities, onNavigate, onOpenMatchModa
               }}>
                 <strong>Platform Insight:</strong>
                 <p style={{ marginTop: '0.25rem', color: 'var(--text-muted)' }}>
-                  SQL is currently one of the most requested skills across sample opportunities, while student readiness remains moderate across pre-final engineering cohorts.
+                  Herbal Standardization (HPLC) and Clinical Phytomedicine are currently among the most requested competencies across AYUSH industry listings, while student readiness remains developing across pre-final BAMS & BNYS cohorts.
                 </p>
               </div>
             </div>
@@ -323,16 +323,16 @@ export default function LandingPage({ opportunities, onNavigate, onOpenMatchModa
             {/* Demand vs Readiness Visualization */}
             <div className="card" style={{ padding: '1.5rem', backgroundColor: 'var(--bg-main)' }}>
               <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-light)', uppercase: true, marginBottom: '1rem' }}>
-                INDUSTRY DEMAND VS STUDENT READINESS (SAMPLE DATA)
+                AYUSH INDUSTRY DEMAND VS STUDENT READINESS (SAMPLE DATA)
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                 {[
-                  { skill: 'SQL Querying', demand: 'High', readiness: 'Medium', gap: 'Priority' },
-                  { skill: 'Python Fundamentals', demand: 'High', readiness: 'High', gap: 'Aligned' },
-                  { skill: 'Cloud Fundamentals', demand: 'Medium', readiness: 'Low', gap: 'Priority' },
-                  { skill: 'Power BI / Viz', demand: 'Medium', readiness: 'Low', gap: 'Priority' },
-                  { skill: 'Communication', demand: 'High', readiness: 'Medium', gap: 'Developing' }
+                  { skill: 'Herbal Standardization (HPLC)', demand: 'High', readiness: 'Medium', gap: 'Priority' },
+                  { skill: 'Clinical Phytomedicine', demand: 'High', readiness: 'High', gap: 'Aligned' },
+                  { skill: 'Yoga Bio-Telemetry', demand: 'Medium', readiness: 'Low', gap: 'Priority' },
+                  { skill: 'Ilmul Advia & Gunapadam', demand: 'Medium', readiness: 'Low', gap: 'Priority' },
+                  { skill: 'Ayush Pharmacovigilance (GCP)', demand: 'High', readiness: 'Medium', gap: 'Developing' }
                 ].map((row, idx) => (
                   <div key={idx} style={{
                     backgroundColor: '#FFFFFF',

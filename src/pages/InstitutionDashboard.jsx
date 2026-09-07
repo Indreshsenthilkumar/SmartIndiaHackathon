@@ -292,11 +292,12 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                   className="form-select"
                   style={{ width: 'auto' }}
                 >
-                  <option value="All">All Departments</option>
-                  <option value="Information Technology">Information Technology</option>
-                  <option value="Computer Science">Computer Science</option>
-                  <option value="Electronics & Comm">Electronics & Comm</option>
-                  <option value="Mechanical Engg">Mechanical Engg</option>
+                  <option value="All">All AYUSH Departments</option>
+                  <option value="Ayurveda (BAMS / MD)">Ayurveda (BAMS / MD)</option>
+                  <option value="Yoga & Naturopathy (BNYS)">Yoga & Naturopathy (BNYS)</option>
+                  <option value="Unani Medicine (BUMS)">Unani Medicine (BUMS)</option>
+                  <option value="Siddha Medicine (BSMS)">Siddha Medicine (BSMS)</option>
+                  <option value="Homeopathy (BHMS)">Homeopathy (BHMS)</option>
                 </select>
               </div>
             </div>
@@ -744,7 +745,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                     </div>
                     <div>
                       <div style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-main)' }}>Dr. Anitha S</div>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Assistant Professor · Dept of Computer Science</div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Assistant Professor · Dept of Ayush Phytomedicine & Clinical Research</div>
                     </div>
                   </div>
 

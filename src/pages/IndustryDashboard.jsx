@@ -10,29 +10,29 @@ export default function IndustryDashboard({ industry, opportunities, challenges,
   // Form State for Create Opportunity
   const [formData, setFormData] = useState({
     title: '',
-    company: 'Vertex Digital Solutions',
+    company: 'Himalaya Wellness R&D',
     type: 'Internship',
     workMode: 'Hybrid',
     location: 'Bengaluru',
     duration: '3 months',
     stipend: '₹25,000 / mo',
-    eligibility: 'B.Tech / B.E (2025-2026 Batch)',
+    eligibility: 'BAMS / BNYS / BUMS / BSMS / BHMS (2025-2026 Batch)',
     description: '',
-    requiredSkillsStr: 'SQL, Python Fundamentals, Communication'
+    requiredSkillsStr: 'Herbal Standardization (HPLC), Clinical Phytomedicine Analytics, Ayush Pharmacovigilance'
   });
 
   // Form State for Create Challenge (Feature 2)
   const [chalFormData, setChalFormData] = useState({
     title: '',
-    industryPartner: 'Vertex Digital Solutions',
-    domain: 'Data Analytics & SQL',
+    industryPartner: 'Himalaya Wellness R&D',
+    domain: 'Ayurveda & Phytochemistry',
     difficulty: 'Intermediate',
     deadline: '30 Sep 2026',
-    stipendOrReward: 'Verified SQL Badge + Interview Fast-track',
-    skillsVerifiedStr: 'SQL, Product Analytics, Data Modeling',
+    stipendOrReward: 'Verified HPLC Assay Badge + Interview Fast-track',
+    skillsVerifiedStr: 'Herbal Standardization (HPLC), Clinical Phytomedicine Analytics, Botanical Spectroscopy',
     description: '',
-    detail1: 'Process multi-table event log records.',
-    detail2: 'Calculate retention metrics.'
+    detail1: 'Process raw UV-spectroscopy data files.',
+    detail2: 'Identify active marker retention times.'
   });
 
   const handlePublishSubmit = (e) => {
@@ -75,15 +75,15 @@ export default function IndustryDashboard({ industry, opportunities, challenges,
 
     setFormData({
       title: '',
-      company: 'Vertex Digital Solutions',
+      company: 'Himalaya Wellness R&D',
       type: 'Internship',
       workMode: 'Hybrid',
       location: 'Bengaluru',
       duration: '3 months',
       stipend: '₹25,000 / mo',
-      eligibility: 'B.Tech / B.E (2025-2026 Batch)',
+      eligibility: 'BAMS / BNYS / BUMS / BSMS / BHMS (2025-2026 Batch)',
       description: '',
-      requiredSkillsStr: 'SQL, Python Fundamentals, Communication'
+      requiredSkillsStr: 'Herbal Standardization (HPLC), Clinical Phytomedicine Analytics, Ayush Pharmacovigilance'
     });
 
     setActiveTab('overview');
