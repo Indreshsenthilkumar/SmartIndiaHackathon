@@ -10,7 +10,7 @@ export default function Footer({ onNavigate }) {
       color: 'var(--text-muted)',
       width: '100%'
     }}>
-      <div style={{ width: '100%', padding: '0 3.5rem' }}>
+      <div className="footer-wrapper">
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
@@ -18,7 +18,7 @@ export default function Footer({ onNavigate }) {
           marginBottom: '1.5rem'
         }}>
           {/* Column 1: Official Logo & Principles */}
-          <div style={{ gridColumn: 'span 2' }}>
+          <div className="footer-logo-col" style={{ gridColumn: 'span 2' }}>
             <div style={{ marginBottom: '0.75rem' }}>
               <img 
                 src="/ayush-logo.png" 

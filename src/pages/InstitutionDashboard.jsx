@@ -202,7 +202,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
             </div>
 
             {/* Two-Column Grid: Readiness Distribution & Top Gaps */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
               {/* Readiness Distribution */}
               <div className="card" style={{ padding: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
@@ -481,7 +481,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
             </div>
 
             {/* Two-Column Grid: Internship Participation Pipeline & Stipend Analytics */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
               {/* Internship Participation Funnel */}
               <div className="card" style={{ padding: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
@@ -509,7 +509,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                   Internship Stipend Distribution
                 </h3>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
                   <div style={{ padding: '0.85rem', backgroundColor: 'var(--bg-subtle)', borderRadius: 'var(--radius-sm)' }}>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Average Stipend</div>
                     <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--accent-primary)' }}>{institution.stipendAnalytics.averageStipend}</div>
@@ -588,7 +588,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
             </div>
 
             {/* 5 Collaboration Pillars */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
               {/* Mentorship Programs */}
               <div className="card" style={{ padding: '1.5rem' }}>
                 <div className="badge badge-blue" style={{ marginBottom: '0.5rem' }}>Pillar 1 · Mentorship Programs</div>

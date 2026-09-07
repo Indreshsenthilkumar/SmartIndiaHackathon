@@ -48,7 +48,7 @@ export default function ChallengesPage({ challenges, onSubmitSolution, studentSu
         {/* Challenges Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
           gap: '1.5rem'
         }}>
           {filteredChallenges.map((chal) => {

@@ -455,7 +455,7 @@ export default function AcademicianDashboard({ academician, academicianOpportuni
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
               {academicianOpportunities.map((opp) => {
                 const isEnrolled = enrolledOpportunities.includes(opp.id);
 

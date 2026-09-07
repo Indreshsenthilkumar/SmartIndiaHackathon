@@ -279,7 +279,7 @@ export default function StudentDashboard({ student, opportunities, challenges, a
 
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
                 gap: '1.25rem'
               }}>
                 {opportunities.slice(0, 2).map((opp) => (
@@ -404,7 +404,7 @@ export default function StudentDashboard({ student, opportunities, challenges, a
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
               {challenges.map((chal) => {
                 const isSubmitted = (student.studentSubmissions || []).some(s => s.challengeId === chal.id);
 
@@ -671,7 +671,7 @@ export default function StudentDashboard({ student, opportunities, challenges, a
                 <span className="badge badge-teal">Static Code Analysis Verified</span>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
                 {student.analyzedProjects.map((proj) => (
                   <div key={proj.id} style={{ padding: '1.25rem', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
@@ -699,7 +699,7 @@ export default function StudentDashboard({ student, opportunities, challenges, a
             </div>
 
             {/* Certifications & Achievements */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
               <div className="card" style={{ padding: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem' }}>
                   Industry & University Certifications

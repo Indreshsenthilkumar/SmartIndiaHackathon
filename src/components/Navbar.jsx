@@ -19,13 +19,12 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
       top: 0,
       zIndex: 900
     }}>
-      <div style={{
+      <div className="header-wrapper" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         height: '74px',
-        width: '100%',
-        padding: '0 3.5rem'
+        width: '100%'
       }}>
         {/* Ministry of Ayush & AIIA Official Logo */}
         <div 
@@ -35,7 +34,7 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
           <img 
             src="/ayush-logo.png" 
             alt="Ministry of Ayush - All India Institute of Ayurveda" 
-            style={{ height: '52px', width: 'auto', objectFit: 'contain' }}
+            style={{ height: '48px', width: 'auto', objectFit: 'contain' }}
           />
         </div>
 
@@ -84,6 +83,13 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
           </button>
 
           <button 
+            onClick={() => handleNav('/academicians')}
+            className={`nav-link ${currentRoute === '/academicians' ? 'active' : ''}`}
+          >
+            For Academicians
+          </button>
+
+          <button 
             onClick={() => handleNav('/about')}
             className={`nav-link ${currentRoute === '/about' ? 'active' : ''}`}
           >
@@ -91,8 +97,8 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
           </button>
         </nav>
 
-        {/* Right Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+        {/* Desktop Right Actions */}
+        <div className="desktop-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           {currentRole !== 'public' ? (
             <button
               onClick={() => handleNav(
@@ -133,23 +139,23 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
             Get Started
             <ArrowRight size={14} />
           </button>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="mobile-toggle"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-main)',
-              display: 'none',
-              padding: '0.4rem',
-              cursor: 'pointer'
-            }}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
+
+        {/* Mobile Menu Toggle Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="mobile-toggle"
+          aria-label="Toggle Navigation Menu"
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-main)',
+            padding: '0.5rem',
+            cursor: 'pointer'
+          }}
+        >
+          {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+        </button>
       </div>
 
       {/* Mobile Drawer Menu */}
@@ -157,11 +163,13 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
         <div style={{
           backgroundColor: '#FFFFFF',
           borderBottom: '1px solid var(--border-subtle)',
-          padding: '1.25rem 1.5rem',
+          padding: '1rem 1.25rem',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.5rem',
-          boxShadow: 'var(--shadow-md)'
+          gap: '0.4rem',
+          boxShadow: 'var(--shadow-lg)',
+          maxHeight: 'calc(100vh - 75px)',
+          overflowY: 'auto'
         }}>
           <button 
             onClick={() => handleNav('/')}
@@ -213,12 +221,46 @@ export default function Navbar({ currentRoute, onNavigate, onOpenRoleModal, curr
             For Industry
           </button>
           <button 
+            onClick={() => handleNav('/academicians')}
+            className={`nav-link ${currentRoute === '/academicians' ? 'active' : ''}`}
+            style={{ width: '100%', justifyContent: 'flex-start', padding: '0.65rem 0.85rem' }}
+          >
+            For Academicians
+          </button>
+          <button 
             onClick={() => handleNav('/about')}
             className={`nav-link ${currentRoute === '/about' ? 'active' : ''}`}
             style={{ width: '100%', justifyContent: 'flex-start', padding: '0.65rem 0.85rem' }}
           >
             About Portal
           </button>
+
+          <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '0.75rem', marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {currentRole !== 'public' && (
+              <button
+                onClick={() => handleNav(
+                  currentRole === 'student' ? '/student' :
+                  currentRole === 'institution' ? '/institution' :
+                  currentRole === 'academician' ? '/academician' : '/industry-dashboard'
+                )}
+                className="btn btn-secondary"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                <Compass size={16} />
+                {currentRole === 'student' ? 'Student Workspace' :
+                 currentRole === 'institution' ? 'Institution Analytics' :
+                 currentRole === 'academician' ? 'Academician Workspace' : 'Industry Pipeline'}
+              </button>
+            )}
+            <button
+              onClick={() => { setMobileMenuOpen(false); onOpenRoleModal(); }}
+              className="btn btn-primary"
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              Select Stakeholder Role
+              <ArrowRight size={16} />
+            </button>
+          </div>
         </div>
       )}
     </header>

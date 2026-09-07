@@ -437,7 +437,7 @@ export default function IndustryDashboard({ industry, opportunities, challenges,
               <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Candidates with evidence-backed skill profiles matching active role requirements.</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
               {industry.matchingCandidates.map((cand) => (
                 <div key={cand.id} className="card" style={{ padding: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
@@ -475,7 +475,7 @@ export default function IndustryDashboard({ industry, opportunities, challenges,
               <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Industry-sponsored faculty development, guest lectures, and live capstone projects.</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
               {industry.collaborations.map((col) => (
                 <div key={col.id} className="card" style={{ padding: '1.5rem' }}>
                   <span className="badge badge-blue" style={{ marginBottom: '0.5rem' }}>{col.type}</span>

@@ -14,7 +14,7 @@ export default function LandingPage({ opportunities, onNavigate, onOpenMatchModa
         <div className="max-width-wrapper">
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '3rem',
             alignItems: 'center'
           }}>
@@ -295,7 +295,7 @@ export default function LandingPage({ opportunities, onNavigate, onOpenMatchModa
       {/* Section: Skill Intelligence */}
       <section style={{ padding: '4rem 0', borderBottom: '1px solid var(--border-subtle)', backgroundColor: '#FFFFFF' }}>
         <div className="max-width-wrapper">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem', alignItems: 'center' }}>
             <div>
               <div className="eyebrow">PLATFORM DEMO DATA</div>
               <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em', marginBottom: '1rem' }}>
@@ -384,7 +384,7 @@ export default function LandingPage({ opportunities, onNavigate, onOpenMatchModa
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '1.25rem'
           }}>
             {opportunities.slice(0, 3).map((opp) => (
@@ -402,7 +402,7 @@ export default function LandingPage({ opportunities, onNavigate, onOpenMatchModa
       {/* Section: For Institutions */}
       <section style={{ padding: '4rem 0', borderBottom: '1px solid var(--border-subtle)', backgroundColor: '#FFFFFF' }}>
         <div className="max-width-wrapper">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem', alignItems: 'center' }}>
             {/* Institution Analytics Preview */}
             <div className="card" style={{ padding: '1.5rem' }}>
               <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-light)', marginBottom: '1rem' }}>
@@ -411,7 +411,7 @@ export default function LandingPage({ opportunities, onNavigate, onOpenMatchModa
 
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
                 gap: '0.75rem',
                 textAlign: 'center',
                 marginBottom: '1.5rem'

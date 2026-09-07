@@ -166,7 +166,7 @@ export default function ProjectVerificationModal({ onClose, onVerifyProject }) {
             {/* Metrics Breakdown */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
               gap: '0.75rem',
               textAlign: 'center'
             }}>

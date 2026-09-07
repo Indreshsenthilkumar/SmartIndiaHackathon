@@ -372,3 +372,69 @@ button {
   color: var(--accent-primary);
   font-weight: 600;
 }
+
+/* Mobile Responsiveness Engine */
+.header-wrapper {
+  width: 100%;
+  padding: 0 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 74px;
+}
+
+.footer-wrapper {
+  width: 100%;
+  padding: 0 3.5rem;
+}
+
+.footer-logo-col {
+  grid-column: span 2;
+}
+
+@media (max-width: 1024px) {
+  .header-wrapper {
+    padding: 0 2rem;
+  }
+  .footer-wrapper {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-wrapper {
+    padding: 0 1rem;
+    height: 64px;
+  }
+  .footer-wrapper {
+    padding: 0 1rem;
+  }
+  .footer-logo-col {
+    grid-column: span 1 !important;
+  }
+  .desktop-nav {
+    display: none !important;
+  }
+  .desktop-actions {
+    display: none !important;
+  }
+  .mobile-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-content {
+    padding: 1.25rem;
+    max-width: 95vw;
+    margin: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-wrapper {
+    padding: 0 0.75rem;
+  }
+  .footer-wrapper {
+    padding: 0 0.75rem;
+  }
+}

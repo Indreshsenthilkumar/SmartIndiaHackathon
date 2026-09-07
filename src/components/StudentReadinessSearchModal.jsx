@@ -130,7 +130,7 @@ export default function StudentReadinessSearchModal({ onClose, defaultRollNo = '
             </div>
 
             {/* Two-Column Detail Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
               {/* Left Column: Skills & GitHub Code Evidence */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {/* Verified Skills */}

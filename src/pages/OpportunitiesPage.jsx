@@ -164,7 +164,7 @@ export default function OpportunitiesPage({ opportunities, onSelectOpportunity, 
         {filteredOpportunities.length > 0 ? (
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
             gap: '1.25rem'
           }}>
             {filteredOpportunities.map((opp) => (
