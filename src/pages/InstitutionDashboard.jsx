@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, BarChart2, Briefcase, Award, CheckCircle2, AlertCircle, ArrowRight, Filter, Users, Search, UserCheck, GraduationCap, Download, FileText } from 'lucide-react';
+import { Building2, BarChart2, Briefcase, Award, CheckCircle2, AlertCircle, ArrowRight, Filter, Users, Search, UserCheck, GraduationCap, Download, FileText, ShieldCheck, Shield, BookOpen, Compass, ChevronDown } from 'lucide-react';
 import MobileBottomNav from '../components/MobileBottomNav';
 import StudentReadinessSearchModal from '../components/StudentReadinessSearchModal';
 
