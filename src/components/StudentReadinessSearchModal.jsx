@@ -82,7 +82,7 @@ export default function StudentReadinessSearchModal({ onClose, defaultRollNo = '
                   cursor: 'pointer'
                 }}
               >
-                {roll} ({searchableStudents[roll].name})
+                {roll} ({searchableStudents[roll]?.name || 'Student Profile'})
               </button>
             ))}
           </div>

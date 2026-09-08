@@ -173,15 +173,6 @@ export default function App() {
       case '/skills':
         return <SkillsExplorePage onNavigate={handleNavigate} />;
       case '/students':
-        return <StudentsPublicPage onNavigate={handleNavigate} onSelectRole={handleSelectRole} />;
-      case '/institutions':
-        return <InstitutionsPublicPage onNavigate={handleNavigate} onSelectRole={handleSelectRole} />;
-      case '/industry':
-        return <IndustryPublicPage onNavigate={handleNavigate} onSelectRole={handleSelectRole} />;
-      case '/academicians':
-        return <AcademiciansPublicPage onNavigate={handleNavigate} />;
-      case '/about':
-        return <AboutPage onNavigate={handleNavigate} />;
       case '/student':
         return (
           <StudentDashboard
@@ -194,8 +185,10 @@ export default function App() {
             onNavigate={handleNavigate}
           />
         );
+      case '/institutions':
       case '/institution':
         return <InstitutionDashboard institution={institution} onNavigate={handleNavigate} />;
+      case '/industry':
       case '/industry-dashboard':
         return (
           <IndustryDashboard
@@ -207,6 +200,7 @@ export default function App() {
             onNavigate={handleNavigate}
           />
         );
+      case '/academicians':
       case '/academician':
         return (
           <AcademicianDashboard
@@ -215,6 +209,8 @@ export default function App() {
             onNavigate={handleNavigate}
           />
         );
+      case '/about':
+        return <AboutPage onNavigate={handleNavigate} />;
       default:
         return (
           <LandingPage
