@@ -86,7 +86,7 @@ export default function StudentDashboard({ student, opportunities, challenges, a
                 Good morning, {student.name}
               </h1>
               <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-                Roll No: <strong>{student.rollNumber || '2026-IT-101'}</strong> · {student.degree} ({student.gradYear})
+                Roll No: <strong>{student.rollNumber || '2026-AYUSH-101'}</strong> · {student.degree} ({student.gradYear})
               </div>
             </div>
 

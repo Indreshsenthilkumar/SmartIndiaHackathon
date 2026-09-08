@@ -8,7 +8,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
   const [selectedDept, setSelectedDept] = useState('All');
   const [searchModalRollNo, setSearchModalRollNo] = useState(null);
 
-  const handleOpenSearch = (rollNo = '2026-IT-101') => {
+  const handleOpenSearch = (rollNo = '2026-AYUSH-101') => {
     setSearchModalRollNo(rollNo);
   };
 
@@ -33,7 +33,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
             </div>
 
             {/* Feature 3 Action Trigger */}
-            <button onClick={() => handleOpenSearch('2026-IT-101')} className="btn btn-primary btn-sm">
+            <button onClick={() => handleOpenSearch('2026-AYUSH-101')} className="btn btn-primary btn-sm">
               <Search size={15} /> Search Student ID / Roll No
             </button>
           </div>
@@ -151,7 +151,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
             </p>
 
             <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.85rem', flexWrap: 'wrap' }}>
-              {['2026-IT-101', '2026-CSE-142', '2026-ECE-208', '2026-DS-305'].map((roll) => (
+              {['2026-AYUSH-101', '2026-BSMS-142', '2026-BUMS-208', '2026-BHMS-305', '2026-BNYS-412'].map((roll) => (
                 <button
                   key={roll}
                   onClick={() => handleOpenSearch(roll)}
@@ -164,7 +164,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
             </div>
           </div>
 
-          <button onClick={() => handleOpenSearch('2026-IT-101')} className="btn btn-primary">
+          <button onClick={() => handleOpenSearch('2026-AYUSH-101')} className="btn btn-primary">
             Open Student ID Lookup
             <ArrowRight size={16} />
           </button>
@@ -189,10 +189,10 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                   PRIORITY ACTIONABLE INSIGHT
                 </span>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                  284 students have a SQL development gap while SQL appears across a large share of current sample opportunities.
+                  312 students have an HPLC Herbal Standardization development gap while Herbal HPLC Assay appears across a large share of active AYUSH opportunity listings.
                 </h3>
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                  Recommended Action: Launch a 2-week SQL Intensive bridge lab prior to campus placement drives.
+                  Recommended Action: Launch a 2-week HPLC Standardization Intensive bridge lab prior to campus placement drives.
                 </p>
               </div>
 
@@ -282,7 +282,7 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
               </div>
 
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <button onClick={() => handleOpenSearch('2026-IT-101')} className="btn btn-primary btn-sm">
+                <button onClick={() => handleOpenSearch('2026-AYUSH-101')} className="btn btn-primary btn-sm">
                   <Search size={14} /> Search Student ID / Roll No
                 </button>
 
@@ -322,9 +322,10 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                     .map((dept, idx) => {
                       const percentage = Math.round((dept.ready / dept.assessed) * 100);
                       const sampleRollNo = 
-                        dept.department.includes('IT') ? '2026-IT-101' :
-                        dept.department.includes('Computer') ? '2026-CSE-142' :
-                        dept.department.includes('Electronics') ? '2026-ECE-208' : '2026-DS-305';
+                        dept.department.includes('Ayurveda') ? '2026-AYUSH-101' :
+                        dept.department.includes('Siddha') ? '2026-BSMS-142' :
+                        dept.department.includes('Unani') ? '2026-BUMS-208' :
+                        dept.department.includes('Homeopathy') ? '2026-BHMS-305' : '2026-BNYS-412';
 
                       return (
                         <tr key={idx}>
@@ -457,12 +458,12 @@ export default function InstitutionDashboard({ institution, onNavigate }) {
                 <table className="custom-table">
                   <thead>
                     <tr>
-                      <th>Department</th>
-                      <th>SQL Querying</th>
-                      <th>Python</th>
-                      <th>Cloud Infrastructure</th>
-                      <th>Product Analytics</th>
-                      <th>Communication</th>
+                      <th>AYUSH System Department</th>
+                      <th>Herbal HPLC</th>
+                      <th>Phytomedicine</th>
+                      <th>Pharmacovigilance</th>
+                      <th>Trial Analytics</th>
+                      <th>Ayush EHR & Comm</th>
                     </tr>
                   </thead>
                   <tbody>

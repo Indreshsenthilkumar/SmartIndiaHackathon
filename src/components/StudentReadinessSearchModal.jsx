@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { X, Search, ShieldCheck, Code2, Award, CheckCircle2, AlertCircle, ArrowRight, UserCheck, BookOpen } from 'lucide-react';
 import { searchableStudents } from '../data/mockData';
 
-export default function StudentReadinessSearchModal({ onClose, defaultRollNo = '2026-IT-101' }) {
+export default function StudentReadinessSearchModal({ onClose, defaultRollNo = '2026-AYUSH-101' }) {
   const [searchTerm, setSearchTerm] = useState(defaultRollNo);
-  const [activeStudent, setActiveStudent] = useState(searchableStudents[defaultRollNo] || searchableStudents['2026-IT-101']);
+  const initialStudent = searchableStudents[defaultRollNo] || searchableStudents['2026-AYUSH-101'] || Object.values(searchableStudents)[0];
+  const [activeStudent, setActiveStudent] = useState(initialStudent);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -13,7 +14,7 @@ export default function StudentReadinessSearchModal({ onClose, defaultRollNo = '
       setActiveStudent(searchableStudents[query]);
     } else {
       // Find fuzzy match
-      const matchedKey = Object.keys(searchableStudents).find(k => k.toLowerCase().includes(query.toLowerCase()) || searchableStudents[k].name.toLowerCase().includes(query.toLowerCase()));
+      const matchedKey = Object.keys(searchableStudents).find(k => k.toLowerCase().includes(query.toLowerCase()) || (searchableStudents[k] && searchableStudents[k].name && searchableStudents[k].name.toLowerCase().includes(query.toLowerCase())));
       if (matchedKey) {
         setActiveStudent(searchableStudents[matchedKey]);
       }
@@ -22,7 +23,9 @@ export default function StudentReadinessSearchModal({ onClose, defaultRollNo = '
 
   const handleSelectSample = (rollNo) => {
     setSearchTerm(rollNo);
-    setActiveStudent(searchableStudents[rollNo]);
+    if (searchableStudents[rollNo]) {
+      setActiveStudent(searchableStudents[rollNo]);
+    }
   };
 
   return (
@@ -52,7 +55,7 @@ export default function StudentReadinessSearchModal({ onClose, defaultRollNo = '
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Enter Student ID / Roll Number (e.g. 2026-IT-101)..."
+                placeholder="Enter Student ID / Roll Number (e.g. 2026-AYUSH-101)..."
                 className="form-input"
                 style={{ paddingLeft: '2.5rem' }}
               />
@@ -70,8 +73,8 @@ export default function StudentReadinessSearchModal({ onClose, defaultRollNo = '
                 key={roll}
                 onClick={() => handleSelectSample(roll)}
                 style={{
-                  background: activeStudent.rollNumber === roll ? 'var(--accent-primary)' : '#FFFFFF',
-                  color: activeStudent.rollNumber === roll ? '#FFFFFF' : 'var(--text-main)',
+                  background: activeStudent && activeStudent.rollNumber === roll ? 'var(--accent-primary)' : '#FFFFFF',
+                  color: activeStudent && activeStudent.rollNumber === roll ? '#FFFFFF' : 'var(--text-main)',
                   border: '1px solid var(--border-subtle)',
                   padding: '0.2rem 0.55rem',
                   borderRadius: '4px',
