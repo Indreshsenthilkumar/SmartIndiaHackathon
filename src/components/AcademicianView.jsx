@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { initialIndustryConnect } from '../data/mockData';
 
-export default function AcademicianView({ academician, onNavigateTab, activeTab = 'dashboard' }) {
+export default function AcademicianView({ academician, challenges = [], onNavigateTab, activeTab = 'dashboard' }) {
   const [currentTab, setCurrentTab] = useState(
     activeTab === 'cohort-monitoring' ? 'cohorts' :
     activeTab === 'faculty-fdp' ? 'fdp' :
@@ -224,6 +224,38 @@ export default function AcademicianView({ academician, onNavigateTab, activeTab 
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Active Industry Hackathons Available for Mentorship */}
+          <div className="app-card">
+            <div className="card-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <h2 className="card-title">Live Industry Challenges & Student Hackathon Mentorship</h2>
+                <p style={{ fontSize: '12.5px', color: '#64748B' }}>Guide department student teams participating in real-time recruiter innovation challenges.</p>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '14px' }}>
+              {(challenges && challenges.length > 0 ? challenges : initialIndustryConnect.challenges).map((c) => (
+                <div key={c.id} style={{ border: '1px solid #E2E8F0', borderRadius: '12px', padding: '16px', background: '#F8FAFC' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#B45309', background: '#FEF3C7', padding: '2px 8px', borderRadius: '9999px' }}>
+                      {c.prizePool || c.prize_pool || 'Industry Hackathon'}
+                    </span>
+                    <span style={{ fontSize: '11px', color: '#64748B' }}>Deadline: {c.deadline || 'Rolling'}</span>
+                  </div>
+                  <h3 style={{ fontSize: '14.5px', fontWeight: 800, color: '#0F172A', marginBottom: '4px' }}>{c.title}</h3>
+                  <div style={{ fontSize: '12px', color: '#2563EB', fontWeight: 700, marginBottom: '8px' }}>Host: {c.host || c.industryPartner}</div>
+                  <button
+                    onClick={() => alert(`Assigned as Faculty Mentor for ${c.title}! Mentorship portal enabled for your research cohort.`)}
+                    className="btn-secondary"
+                    style={{ width: '100%', justifyContent: 'center', fontSize: '12px', padding: '6px 12px' }}
+                  >
+                    <span>Mentor Department Teams</span>
+                    <ArrowRight size={13} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

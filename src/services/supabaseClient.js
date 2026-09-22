@@ -4,7 +4,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import { initialOpportunities, initialStudent, initialSkillAssessments } from '../data/mockData';
+import { initialOpportunities, initialStudent, initialSkillAssessments, initialIndustryConnect } from '../data/mockData';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
@@ -230,6 +230,66 @@ export const supabaseService = {
       console.warn('Supabase student update error:', err.message);
       return { success: true, data: student, source: 'local-fallback' };
     }
+  },
+
+  /**
+   * 4.1 INNOVATION CHALLENGES & HACKATHONS (Posted by Industry Recruiters)
+   */
+  async getChallenges() {
+    if (!supabase) return { data: initialIndustryConnect.challenges, source: 'local' };
+    try {
+      const { data, error } = await supabase
+        .from('challenges')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      if (data && data.length > 0) {
+        const mapped = data.map(c => ({
+          id: c.id,
+          title: c.title,
+          host: c.host,
+          prizePool: c.prize_pool,
+          deadline: c.deadline,
+          participants: c.participants || 0,
+          difficulty: c.difficulty || 'Hard',
+          tags: c.tags || ['Innovation', 'Industry 4.0'],
+          summary: c.summary,
+          eligibleColleges: c.eligible_colleges || 'Open to all accredited engineering colleges'
+        }));
+        return { data: mapped, source: 'supabase' };
+      }
+    } catch (err) {
+      console.warn('Supabase challenges fetch note:', err.message);
+    }
+    return { data: initialIndustryConnect.challenges, source: 'local-fallback' };
+  },
+
+  async postChallenge(challenge) {
+    const record = {
+      id: challenge.id || `chal-${Date.now()}`,
+      title: challenge.title,
+      host: challenge.host,
+      prize_pool: challenge.prizePool,
+      deadline: challenge.deadline,
+      participants: challenge.participants || 0,
+      difficulty: challenge.difficulty || 'Hard',
+      tags: challenge.tags || [],
+      summary: challenge.summary
+    };
+
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('challenges').upsert(record).select();
+        if (error) throw error;
+        console.log('⚡ [Supabase Realtime] Challenge published to DB:', record.title);
+        return { success: true, data: challenge, source: 'supabase' };
+      } catch (err) {
+        console.warn('Supabase challenge post error:', err.message);
+      }
+    }
+
+    return { success: true, data: challenge, source: 'local' };
   },
 
   /**

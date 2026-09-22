@@ -22,7 +22,8 @@ import {
   initialAcademician,
   initialRecruiter,
   institutionMetrics,
-  initialSkillAssessments
+  initialSkillAssessments,
+  initialIndustryConnect
 } from './data/mockData';
 
 import { supabaseService, isSupabaseConfigured } from './services/supabaseClient';
@@ -68,6 +69,7 @@ export default function App() {
   const [recruiter, setRecruiter] = useState(initialRecruiter);
   const [institution, setInstitution] = useState(institutionMetrics);
   const [assessments, setAssessments] = useState(initialSkillAssessments);
+  const [challenges, setChallenges] = useState(initialIndustryConnect.challenges);
 
   // Modals State
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
@@ -183,6 +185,12 @@ export default function App() {
         if (quizRes.data && quizRes.data.length > 0) {
           setAssessments(quizRes.data);
         }
+
+        // 4. Fetch live innovation challenges & hackathons from Supabase
+        const chalRes = await supabaseService.getChallenges();
+        if (chalRes.data && chalRes.data.length > 0) {
+          setChallenges(chalRes.data);
+        }
       } catch (err) {
         console.warn('Initial Supabase sync note:', err.message);
       }
@@ -267,10 +275,33 @@ export default function App() {
       }
     );
 
+    const unsubscribeChallenges = supabaseService.subscribeToTable(
+      'challenges',
+      (newChal) => {
+        const formatted = {
+          id: newChal.id,
+          title: newChal.title,
+          host: newChal.host,
+          prizePool: newChal.prize_pool || newChal.prizePool,
+          deadline: newChal.deadline,
+          participants: newChal.participants || 0,
+          difficulty: newChal.difficulty || 'Hard',
+          tags: newChal.tags || ['Innovation', 'Industry 4.0'],
+          summary: newChal.summary
+        };
+        setChallenges(prev => {
+          if (prev.some(c => c.id === formatted.id)) return prev;
+          return [formatted, ...prev];
+        });
+        addToast('New Live Hackathon! 🏆', `${newChal.title} hosted by ${newChal.host} was just posted in real-time.`, 'info');
+      }
+    );
+
     return () => {
       if (unsubscribeOpportunities) unsubscribeOpportunities();
       if (unsubscribeApplications) unsubscribeApplications();
       if (unsubscribeAssessments) unsubscribeAssessments();
+      if (unsubscribeChallenges) unsubscribeChallenges();
     };
   }, []);
 
@@ -388,6 +419,18 @@ export default function App() {
     await supabaseService.createAssessment(newAssessment);
   };
 
+  const handleLaunchChallenge = async (newChallenge) => {
+    setChallenges(prev => [newChallenge, ...prev]);
+    addToast(
+      'Hackathon Published Across Network! 🏆',
+      `"${newChallenge.title}" is live for all registered Colleges and Students to participate.`,
+      'success'
+    );
+
+    // ⚡ Realtime Push to Supabase Database
+    await supabaseService.postChallenge(newChallenge);
+  };
+
   // Render main page content based on current tab and role
   const renderMainContent = () => {
     // Role-specific main content handlers
@@ -395,6 +438,7 @@ export default function App() {
       return (
         <AcademicianView 
           academician={academician} 
+          challenges={challenges}
           onNavigateTab={handleNavigateTab} 
           activeTab={currentTab}
         />
@@ -407,6 +451,8 @@ export default function App() {
           recruiter={recruiter} 
           opportunities={opportunities} 
           onAddOpportunity={handleAddOpportunity} 
+          challenges={challenges}
+          onLaunchChallenge={handleLaunchChallenge}
           student={student} 
           activeTab={currentTab}
         />
@@ -417,6 +463,7 @@ export default function App() {
       return (
         <InstitutionAdminView 
           institution={institution} 
+          challenges={challenges}
           activeTab={currentTab}
         />
       );
@@ -451,7 +498,14 @@ export default function App() {
       case 'learning-path':
         return <LearningPathView student={student} />;
       case 'industry-connect':
-        return <IndustryConnectView currentRole={currentRole} />;
+        return (
+          <IndustryConnectView 
+            currentRole={currentRole} 
+            challenges={challenges}
+            onApplyOpportunity={handleApplyOpportunity}
+            addToast={addToast}
+          />
+        );
       case 'profile':
         return <ProfilePortfolioView student={student} />;
       case 'dashboard':
