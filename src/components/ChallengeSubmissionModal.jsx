@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { X, Send, Code2, CheckCircle2, Award, FileText } from 'lucide-react';
+import { X, Send, Code2, CheckCircle2, Award, FileText, Globe, Sparkles } from 'lucide-react';
 
 export default function ChallengeSubmissionModal({ challenge, onClose, onSubmitSolution }) {
-  const [solutionRepoUrl, setSolutionRepoUrl] = useState('github.com/indresh/cohort-pipeline-solution');
-  const [methodology, setMethodology] = useState('Processed 100k event logs using SQL window functions with 420ms query latency.');
-  const [prototypeUrl, setPrototypeUrl] = useState('https://demo.vercel.app/cohort-viz');
+  const [solutionRepoUrl, setSolutionRepoUrl] = useState('https://github.com/indresh/edge-ai-defect-solution');
+  const [methodology, setMethodology] = useState('Lightweight MobileNetV3 backbone fine-tuned on industrial surface dataset with 97.4% mAP and sub-15ms edge inference.');
+  const [prototypeUrl, setPrototypeUrl] = useState('https://demo.vercel.app/edge-defect-detector');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   if (!challenge) return null;
@@ -16,13 +16,13 @@ export default function ChallengeSubmissionModal({ challenge, onClose, onSubmitS
     const submission = {
       challengeId: challenge.id,
       challengeTitle: challenge.title,
-      industryPartner: challenge.industryPartner,
-      submittedDate: 'Today (7 Sep 2026)',
+      industryPartner: challenge.industryPartner || challenge.host,
+      submittedDate: 'Today (Live)',
       solutionRepoUrl,
       methodology,
       prototypeUrl,
       status: 'Submitted — Pending Mentor Review',
-      skillsVerified: challenge.skillsVerified
+      skillsVerified: challenge.skillsVerified || challenge.tags || ['Innovation']
     };
 
     onSubmitSolution(submission);
@@ -30,118 +30,194 @@ export default function ChallengeSubmissionModal({ challenge, onClose, onSubmitS
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '580px' }}>
+      <div 
+        className="modal-content" 
+        onClick={(e) => e.stopPropagation()} 
+        style={{ 
+          maxWidth: '580px',
+          background: '#FFFFFF',
+          borderRadius: '20px',
+          padding: '28px',
+          boxShadow: '0 25px 50px -12px rgba(15, 23, 42, 0.35)',
+          border: '1px solid #E2E8F0',
+          position: 'relative'
+        }}
+      >
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
           <div>
-            <span className="badge badge-blue" style={{ marginBottom: '0.4rem' }}>
-              FEATURE 2 · INDUSTRY CHALLENGE ENGINE
-            </span>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '5px',
+              background: '#EFF6FF',
+              color: '#2563EB',
+              border: '1px solid #BFDBFE',
+              padding: '3px 10px',
+              borderRadius: '9999px',
+              fontSize: '11px',
+              fontWeight: 800,
+              marginBottom: '6px'
+            }}>
+              <Sparkles size={12} />
+              <span>INDUSTRY CHALLENGE SUBMISSION</span>
+            </div>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginBottom: '2px' }}>
               Submit Challenge Solution
             </h3>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-              {challenge.title} by <strong>{challenge.industryPartner}</strong>
+            <p style={{ fontSize: '13px', color: '#64748B', fontWeight: 500 }}>
+              {challenge.title} · <strong style={{ color: '#2563EB' }}>{challenge.industryPartner || challenge.host}</strong>
             </p>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-light)', cursor: 'pointer' }}>
-            <X size={20} />
+          <button 
+            onClick={onClose} 
+            style={{ 
+              background: '#F1F5F9', 
+              border: 'none', 
+              color: '#64748B', 
+              cursor: 'pointer',
+              width: '32px',
+              height: '32px',
+              borderRadius: '9999px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <X size={18} />
           </button>
         </div>
 
         {!isSubmitted ? (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Challenge Info Box */}
             <div style={{
-              backgroundColor: 'var(--bg-subtle)',
-              border: '1px solid var(--border-subtle)',
-              padding: '0.85rem 1rem',
-              borderRadius: 'var(--radius-md)',
-              marginBottom: '1.25rem',
-              fontSize: '0.85rem'
+              backgroundColor: '#FEF3C7',
+              border: '1px solid #FDE68A',
+              padding: '12px 16px',
+              borderRadius: '12px',
+              fontSize: '13px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
             }}>
-              <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.2rem' }}>
-                Reward & Skill Verification:
+              <div>
+                <div style={{ fontWeight: 800, color: '#B45309' }}>
+                  Reward & Verification Badge:
+                </div>
+                <div style={{ color: '#92400E', fontWeight: 600, fontSize: '12.5px' }}>
+                  {challenge.stipendOrReward || challenge.prizePool || '₹ 2,50,000 + Direct Interview PPIs'}
+                </div>
               </div>
-              <div style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>
-                {challenge.stipendOrReward}
-              </div>
+              <span style={{ fontSize: '11.5px', fontWeight: 800, background: '#FDE68A', color: '#92400E', padding: '3px 8px', borderRadius: '6px' }}>
+                Verified by Recruiter
+              </span>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Solution GitHub Repository / Code URL *</label>
+            {/* Repo URL */}
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ fontSize: '13px', fontWeight: 700, color: '#1E293B', marginBottom: '6px' }}>
+                Solution GitHub Repository / Code URL *
+              </label>
               <div style={{ position: 'relative' }}>
-                <Code2 size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-light)' }} />
+                <Code2 size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
                 <input
                   type="text"
                   required
                   value={solutionRepoUrl}
                   onChange={(e) => setSolutionRepoUrl(e.target.value)}
-                  placeholder="github.com/username/challenge-solution"
+                  placeholder="https://github.com/username/challenge-solution"
                   className="form-input"
-                  style={{ paddingLeft: '2.5rem' }}
+                  style={{ paddingLeft: '38px' }}
                 />
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Live Prototype / Demo Link (Optional)</label>
-              <input
-                type="text"
-                value={prototypeUrl}
-                onChange={(e) => setPrototypeUrl(e.target.value)}
-                placeholder="https://your-demo-app.com"
-                className="form-input"
-              />
+            {/* Prototype Link */}
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ fontSize: '13px', fontWeight: 700, color: '#1E293B', marginBottom: '6px' }}>
+                Live Prototype / Demo Link (Optional)
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Globe size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
+                <input
+                  type="text"
+                  value={prototypeUrl}
+                  onChange={(e) => setPrototypeUrl(e.target.value)}
+                  placeholder="https://your-demo-app.vercel.app"
+                  className="form-input"
+                  style={{ paddingLeft: '38px' }}
+                />
+              </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Technical Approach & Methodology *</label>
+            {/* Methodology */}
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" style={{ fontSize: '13px', fontWeight: 700, color: '#1E293B', marginBottom: '6px' }}>
+                Technical Approach & Architecture Methodology *
+              </label>
               <textarea
                 rows="3"
                 required
                 value={methodology}
                 onChange={(e) => setMethodology(e.target.value)}
-                placeholder="Briefly describe query optimizations, architecture choices, or design decisions..."
+                placeholder="Briefly describe your algorithm optimizations, model choices, or architectural decisions..."
                 className="form-textarea"
+                style={{ resize: 'vertical' }}
               />
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
-              <button type="button" onClick={onClose} className="btn btn-secondary btn-sm">
+            {/* Footer Buttons */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px', borderTop: '1px solid #E2E8F0', paddingTop: '16px' }}>
+              <button 
+                type="button" 
+                onClick={onClose} 
+                className="btn-secondary"
+                style={{ padding: '9px 18px', fontSize: '13px' }}
+              >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-primary btn-sm">
-                Submit Solution to Mentors
+              <button 
+                type="submit" 
+                className="btn-primary"
+                style={{ padding: '9px 20px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <span>Submit Solution to Mentors</span>
                 <Send size={14} />
               </button>
             </div>
           </form>
         ) : (
           /* Submission Confirmation */
-          <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+          <div style={{ textAlign: 'center', padding: '16px 0' }}>
             <div style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '50%',
-              backgroundColor: '#F0FDF4',
-              color: '#0D9488',
+              width: '64px',
+              height: '64px',
+              borderRadius: '9999px',
+              backgroundColor: '#DCFCE7',
+              color: '#16A34A',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 1rem auto'
+              margin: '0 auto 16px auto',
+              border: '2px solid #BBF7D0'
             }}>
-              <CheckCircle2 size={30} />
+              <CheckCircle2 size={36} />
             </div>
 
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#0F172A', marginBottom: '6px' }}>
               Solution Submitted Successfully!
             </h3>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', maxWidth: '420px', margin: '0 auto 1.5rem auto' }}>
-              Your submission has been forwarded to industry mentors at <strong>{challenge.industryPartner}</strong>. Upon review, verified skill badges will be automatically awarded to your profile.
+            <p style={{ fontSize: '13.5px', color: '#64748B', maxWidth: '440px', margin: '0 auto 20px auto', lineHeight: 1.5 }}>
+              Your solution repository has been forwarded directly to hiring mentors at <strong>{challenge.industryPartner || challenge.host}</strong>. Upon review, verified competency badges and interview shortlists will appear in your profile.
             </p>
 
-            <button onClick={onClose} className="btn btn-primary btn-sm">
+            <button 
+              onClick={onClose} 
+              className="btn-primary"
+              style={{ padding: '10px 24px', fontSize: '13.5px', margin: '0 auto' }}
+            >
               Done
             </button>
           </div>
@@ -150,3 +226,4 @@ export default function ChallengeSubmissionModal({ challenge, onClose, onSubmitS
     </div>
   );
 }
+

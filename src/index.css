@@ -889,9 +889,9 @@ input, select, textarea {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 100;
+  background-color: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -904,16 +904,54 @@ input, select, textarea {
   to { opacity: 1; }
 }
 
-.modal-card {
-  background-color: white;
+.modal-card,
+.modal-content {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  max-width: 640px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+  max-width: 620px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  border: 1px solid var(--border-color);
+  border: 1px solid #e2e8f0;
+  padding: 28px;
   animation: scaleUp 0.2s ease-out;
+  position: relative;
+  z-index: 1000;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  background-color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 @keyframes scaleUp {
