@@ -3,7 +3,7 @@
  * Connects React.js frontend to Node.js REST API, Python NLP Engine & Supabase
  */
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = (import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/api` : 'http://localhost:5001/api');
 
 export const aiApiService = {
   /**

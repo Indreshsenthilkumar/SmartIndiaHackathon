@@ -173,6 +173,27 @@ const server = http.createServer(async (req, res) => {
     });
   };
 
+  // Route: Root Welcome & API Docs
+  if ((url.pathname === '/' || url.pathname === '') && req.method === 'GET') {
+    return sendJson(200, {
+      message: '🚀 Welcome to SIXTH SENSE Skill Orbit Backend API Server',
+      status: 'online',
+      version: '1.0.0',
+      techStack: {
+        backend: 'Node.js REST API',
+        ai_nlp: 'Python (spaCy + scikit-learn TF-IDF & Cosine Similarity)',
+        database: 'Supabase (PostgreSQL & Realtime WebSockets)'
+      },
+      endpoints: {
+        health: 'GET /api/health',
+        taxonomy: 'GET /api/ai/taxonomy',
+        skillMatch: 'POST /api/ai/skill-match',
+        extractSkills: 'POST /api/ai/extract-skills'
+      },
+      docs: 'https://github.com/Indreshsenthilkumar/SmartIndiaHackathon'
+    });
+  }
+
   // Route: Health & Tech Stack
   if (url.pathname === '/api/health' && req.method === 'GET') {
     return sendJson(200, {
