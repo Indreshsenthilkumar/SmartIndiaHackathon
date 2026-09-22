@@ -14,8 +14,12 @@ import {
   Calendar,
   X,
   ExternalLink,
-  ShieldCheck
+  ShieldCheck,
+  GraduationCap,
+  BookOpen,
+  Award
 } from 'lucide-react';
+import { initialIndustryConnect } from '../data/mockData';
 
 export default function IndustryRecruiterView({ 
   recruiter, 
@@ -23,6 +27,8 @@ export default function IndustryRecruiterView({
   onAddOpportunity, 
   challenges = [],
   onLaunchChallenge,
+  fdpPrograms = [],
+  onHostFdp,
   student,
   activeTab = 'dashboard'
 }) {
@@ -30,7 +36,8 @@ export default function IndustryRecruiterView({
     activeTab === 'manage-postings' ? 'postings' :
     activeTab === 'candidate-matchmaker' ? 'candidates' :
     activeTab === 'post-opportunity' ? 'post' :
-    activeTab === 'industry-challenges' ? 'challenges' : 'overview'
+    activeTab === 'industry-challenges' ? 'challenges' :
+    activeTab === 'faculty-fdps' ? 'fdps' : 'overview'
   );
 
   React.useEffect(() => {
@@ -38,6 +45,7 @@ export default function IndustryRecruiterView({
     else if (activeTab === 'candidate-matchmaker') setCurrentTab('candidates');
     else if (activeTab === 'post-opportunity') setCurrentTab('post');
     else if (activeTab === 'industry-challenges') setCurrentTab('challenges');
+    else if (activeTab === 'faculty-fdps') setCurrentTab('fdps');
     else if (activeTab === 'dashboard') setCurrentTab('overview');
   }, [activeTab]);
 
@@ -60,6 +68,19 @@ export default function IndustryRecruiterView({
   const [hTags, setHTags] = useState('GenAI, Transformers, Vector DBs, React');
   const [hSummary, setHSummary] = useState('Build an enterprise-grade multimodal AI workflow that automates unstructured document extraction and reasoning.');
   const [hColleges, setHColleges] = useState('Open to all AICTE & NIRF Accredited Colleges (Anna University, IITs, NITs, BITS)');
+
+  // Faculty FDP Hosting State
+  const [showFdpModal, setShowFdpModal] = useState(false);
+  const [fdpTitle, setFdpTitle] = useState('');
+  const [fdpHost, setFdpHost] = useState(recruiter.company || 'Google Cloud & Partner Labs');
+  const [fdpDuration, setFdpDuration] = useState('2 Weeks (Online + 3 Days On-campus)');
+  const [fdpDates, setFdpDates] = useState('15 Dec - 30 Dec 2026');
+  const [fdpStipend, setFdpStipend] = useState('₹ 50,000 Research Fellowship + Cloud Credits');
+  const [fdpSeats, setFdpSeats] = useState('35 Faculty Seats');
+  const [fdpEligibility, setFdpEligibility] = useState('Professors / Assistant Professors in CSE, IT, ECE, AI');
+  const [fdpCurriculum, setFdpCurriculum] = useState('Hands-on industrial immersion into generative AI pipelines, LLM evaluation, and joint curriculum co-development for college labs.');
+
+  const activeFdps = fdpPrograms && fdpPrograms.length > 0 ? fdpPrograms : initialIndustryConnect.facultyPrograms;
 
   const [candidatePool, setCandidatePool] = useState([
     {
@@ -166,6 +187,29 @@ export default function IndustryRecruiterView({
     setHTitle('');
   };
 
+  const handleFdpSubmit = (e) => {
+    e.preventDefault();
+    if (!fdpTitle.trim()) return;
+
+    const newFdp = {
+      id: `fdp-${Date.now()}`,
+      title: fdpTitle,
+      host: fdpHost || recruiter.company,
+      duration: fdpDuration || '2 Weeks',
+      dates: fdpDates || '15 Dec - 30 Dec 2026',
+      stipendGrant: fdpStipend || '₹ 50,000 Research Fellowship',
+      seats: fdpSeats || '35 Faculty Seats',
+      eligibility: fdpEligibility || 'Engineering Faculty',
+      curriculum: fdpCurriculum
+    };
+
+    if (onHostFdp) {
+      onHostFdp(newFdp);
+    }
+    setShowFdpModal(false);
+    setFdpTitle('');
+  };
+
   return (
     <div className="page-container">
       {/* Header */}
@@ -213,14 +257,24 @@ export default function IndustryRecruiterView({
           </div>
         </div>
 
-        <button
-          onClick={() => setShowPostModal(true)}
-          className="btn-primary"
-          style={{ padding: '10px 22px' }}
-        >
-          <PlusCircle size={16} />
-          <span>Post New Opportunity</span>
-        </button>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setShowFdpModal(true)}
+            className="btn-secondary"
+            style={{ padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <GraduationCap size={16} />
+            <span>Host Faculty FDP</span>
+          </button>
+          <button
+            onClick={() => setShowPostModal(true)}
+            className="btn-primary"
+            style={{ padding: '10px 22px' }}
+          >
+            <PlusCircle size={16} />
+            <span>Post New Opportunity</span>
+          </button>
+        </div>
       </div>
 
       {/* Internal Tab Navigation */}
@@ -236,7 +290,8 @@ export default function IndustryRecruiterView({
           { id: 'overview', label: 'Recruiter Dashboard' },
           { id: 'postings', label: `Active Postings (${opportunities.length})` },
           { id: 'candidates', label: 'Candidate Matchmaker' },
-          { id: 'challenges', label: 'Hackathons & Live Challenges' }
+          { id: 'challenges', label: 'Hackathons & Live Challenges' },
+          { id: 'fdps', label: `Faculty FDPs & R&D (${activeFdps.length})` }
         ].map((t) => (
           <button
             key={t.id}
@@ -272,8 +327,8 @@ export default function IndustryRecruiterView({
           <div style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>Interviews Scheduled</div>
         </div>
         <div className="app-card" style={{ textAlign: 'center', padding: '18px' }}>
-          <div style={{ fontSize: '24px', fontWeight: 800, color: '#7C3AED' }}>{recruiter.offersExtended}</div>
-          <div style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>Offers Extended</div>
+          <div style={{ fontSize: '24px', fontWeight: 800, color: '#7C3AED' }}>{activeFdps.length}</div>
+          <div style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>Faculty FDPs Hosted</div>
         </div>
       </div>
 
@@ -546,6 +601,102 @@ export default function IndustryRecruiterView({
         </div>
       )}
 
+      {/* Tab: Faculty FDPs & Fellowships Hosted */}
+      {currentTab === 'fdps' && (
+        <div className="app-card">
+          <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                <h2 className="card-title" style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A' }}>
+                  Sponsored Faculty Development Programs (FDPs) & Immersion Grants
+                </h2>
+                <span style={{ background: '#EFF6FF', color: '#2563EB', padding: '2px 8px', borderRadius: '9999px', fontSize: '11px', fontWeight: 800 }}>
+                  Academics & Research Focus
+                </span>
+              </div>
+              <p style={{ fontSize: '13px', color: '#64748B', marginTop: '2px' }}>
+                Upskill university professors and formulate co-branded curriculums and joint research projects.
+              </p>
+            </div>
+            <button 
+              onClick={() => setShowFdpModal(true)} 
+              className="btn-primary" 
+              style={{ padding: '9px 18px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <PlusCircle size={15} />
+              <span>Host Faculty FDP</span>
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {activeFdps.map((prog) => (
+              <div 
+                key={prog.id}
+                style={{ 
+                  border: '1px solid #E2E8F0', 
+                  borderRadius: '16px', 
+                  padding: '22px', 
+                  background: '#FFFFFF',
+                  boxShadow: 'var(--shadow-xs)'
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', marginBottom: '10px' }}>
+                  <div>
+                    <span style={{ 
+                      fontSize: '11px', 
+                      fontWeight: 800, 
+                      color: '#2563EB', 
+                      background: '#EFF6FF', 
+                      border: '1px solid #BFDBFE',
+                      padding: '2px 8px', 
+                      borderRadius: '6px',
+                      textTransform: 'uppercase',
+                      marginBottom: '4px',
+                      display: 'inline-block'
+                    }}>
+                      {prog.host}
+                    </span>
+                    <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#0F172A' }}>{prog.title}</h3>
+                  </div>
+
+                  <span style={{ 
+                    fontSize: '13px', 
+                    fontWeight: 800, 
+                    color: '#16A34A', 
+                    background: '#F0FDF4', 
+                    border: '1px solid #BBF7D0',
+                    padding: '4px 12px', 
+                    borderRadius: '9999px' 
+                  }}>
+                    {prog.stipendGrant}
+                  </span>
+                </div>
+
+                <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.5, marginBottom: '14px' }}>
+                  <strong>Curriculum Focus:</strong> {prog.curriculum}
+                </p>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', paddingTop: '12px', borderTop: '1px solid #F1F5F9' }}>
+                  <div style={{ fontSize: '12.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <span>📅 Dates: <strong>{prog.dates || prog.duration}</strong></span>
+                    <span>🎓 Target: <strong>{prog.eligibility}</strong></span>
+                    <span>🪑 Capacity: <strong>{prog.seats}</strong></span>
+                  </div>
+
+                  <button 
+                    onClick={() => alert(`Opening Faculty Application Review for "${prog.title}". 18 Professor nominations received from Anna University and IIT Madras.`)} 
+                    className="btn-secondary" 
+                    style={{ fontSize: '12.5px', padding: '7px 16px', borderRadius: '8px' }}
+                  >
+                    View Faculty Applications (18 Enrolled)
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 🚀 Launch Innovation Challenge / Hackathon Modal */}
       {showHackathonModal && (
         <div className="modal-overlay" onClick={() => setShowHackathonModal(false)}>
@@ -685,6 +836,149 @@ export default function IndustryRecruiterView({
                 >
                   <Trophy size={16} />
                   <span>Publish Hackathon Live</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 🎓 Host Faculty FDP Modal */}
+      {showFdpModal && (
+        <div className="modal-overlay" onClick={() => setShowFdpModal(false)}>
+          <div className="modal-card" style={{ maxWidth: '640px' }} onClick={(e) => e.stopPropagation()}>
+            <div style={{ padding: '24px', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  background: '#EFF6FF',
+                  color: '#2563EB',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <GraduationCap size={20} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A' }}>Host Faculty Development Program (FDP)</h3>
+                  <p style={{ fontSize: '12px', color: '#64748B' }}>Publish funded immersion programs and research fellowships directly to university faculty</p>
+                </div>
+              </div>
+              <button onClick={() => setShowFdpModal(false)} style={{ color: '#94A3B8', border: 'none', background: 'none', cursor: 'pointer' }}>
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleFdpSubmit} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', maxHeight: '75vh', overflowY: 'auto' }}>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>FDP Program Title *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Faculty Immersion: Generative AI, Cloud Infrastructure & Lab Modernization"
+                  value={fdpTitle}
+                  onChange={(e) => setFdpTitle(e.target.value)}
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', marginTop: '4px', fontSize: '13px' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>Host Enterprise / Lab *</label>
+                  <input
+                    type="text"
+                    required
+                    value={fdpHost}
+                    onChange={(e) => setFdpHost(e.target.value)}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', marginTop: '4px', fontSize: '13px' }}
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>Stipend / Research Fellowship Grant *</label>
+                  <input
+                    type="text"
+                    required
+                    value={fdpStipend}
+                    onChange={(e) => setFdpStipend(e.target.value)}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', marginTop: '4px', fontSize: '13px' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>Duration & Format *</label>
+                  <input
+                    type="text"
+                    required
+                    value={fdpDuration}
+                    onChange={(e) => setFdpDuration(e.target.value)}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', marginTop: '4px', fontSize: '13px' }}
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>Scheduled Dates *</label>
+                  <input
+                    type="text"
+                    required
+                    value={fdpDates}
+                    onChange={(e) => setFdpDates(e.target.value)}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', marginTop: '4px', fontSize: '13px' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>Faculty Eligibility</label>
+                  <input
+                    type="text"
+                    required
+                    value={fdpEligibility}
+                    onChange={(e) => setFdpEligibility(e.target.value)}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', marginTop: '4px', fontSize: '13px' }}
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>Available Faculty Seats</label>
+                  <input
+                    type="text"
+                    required
+                    value={fdpSeats}
+                    onChange={(e) => setFdpSeats(e.target.value)}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', marginTop: '4px', fontSize: '13px' }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>Curriculum & Research Focus Areas *</label>
+                <textarea
+                  required
+                  rows={3}
+                  value={fdpCurriculum}
+                  onChange={(e) => setFdpCurriculum(e.target.value)}
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', marginTop: '4px', fontSize: '13px', fontFamily: 'inherit', resize: 'vertical' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '14px', paddingTop: '16px', borderTop: '1px solid #E2E8F0' }}>
+                <button
+                  type="button"
+                  onClick={() => setShowFdpModal(false)}
+                  style={{ padding: '10px 18px', borderRadius: '8px', border: '1px solid #E2E8F0', fontWeight: 700, background: '#F8FAFC', color: '#475569', cursor: 'pointer' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  style={{ padding: '10px 22px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <GraduationCap size={16} />
+                  <span>Publish Faculty FDP Live</span>
                 </button>
               </div>
             </form>

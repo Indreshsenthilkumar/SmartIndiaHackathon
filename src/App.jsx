@@ -70,6 +70,7 @@ export default function App() {
   const [institution, setInstitution] = useState(institutionMetrics);
   const [assessments, setAssessments] = useState(initialSkillAssessments);
   const [challenges, setChallenges] = useState(initialIndustryConnect.challenges);
+  const [fdpPrograms, setFdpPrograms] = useState(initialIndustryConnect.facultyPrograms);
 
   // Modals State
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
@@ -191,6 +192,12 @@ export default function App() {
         if (chalRes.data && chalRes.data.length > 0) {
           setChallenges(chalRes.data);
         }
+
+        // 5. Fetch live Faculty FDPs from Supabase
+        const fdpRes = await supabaseService.getFdpPrograms();
+        if (fdpRes.data && fdpRes.data.length > 0) {
+          setFdpPrograms(fdpRes.data);
+        }
       } catch (err) {
         console.warn('Initial Supabase sync note:', err.message);
       }
@@ -297,11 +304,34 @@ export default function App() {
       }
     );
 
+    const unsubscribeFdps = supabaseService.subscribeToTable(
+      'faculty_fdps',
+      (newFdp) => {
+        const formatted = {
+          id: newFdp.id,
+          title: newFdp.title,
+          host: newFdp.host,
+          duration: newFdp.duration,
+          dates: newFdp.dates,
+          stipendGrant: newFdp.stipend_grant || newFdp.stipendGrant,
+          seats: newFdp.seats,
+          eligibility: newFdp.eligibility,
+          curriculum: newFdp.curriculum
+        };
+        setFdpPrograms(prev => {
+          if (prev.some(f => f.id === formatted.id)) return prev;
+          return [formatted, ...prev];
+        });
+        addToast('New Faculty FDP Live! 🎓', `"${newFdp.title}" hosted by ${newFdp.host} is now open for faculty enrollments.`, 'info');
+      }
+    );
+
     return () => {
       if (unsubscribeOpportunities) unsubscribeOpportunities();
       if (unsubscribeApplications) unsubscribeApplications();
       if (unsubscribeAssessments) unsubscribeAssessments();
       if (unsubscribeChallenges) unsubscribeChallenges();
+      if (unsubscribeFdps) unsubscribeFdps();
     };
   }, []);
 
@@ -431,6 +461,18 @@ export default function App() {
     await supabaseService.postChallenge(newChallenge);
   };
 
+  const handleHostFdp = async (newFdp) => {
+    setFdpPrograms(prev => [newFdp, ...prev]);
+    addToast(
+      'Faculty FDP Published! 🎓',
+      `"${newFdp.title}" hosted by ${newFdp.host} is live for all Professors and Academicians.`,
+      'success'
+    );
+
+    // ⚡ Realtime Push to Supabase Database
+    await supabaseService.postFdpProgram(newFdp);
+  };
+
   // Render main page content based on current tab and role
   const renderMainContent = () => {
     // Role-specific main content handlers
@@ -439,6 +481,7 @@ export default function App() {
         <AcademicianView 
           academician={academician} 
           challenges={challenges}
+          fdpPrograms={fdpPrograms}
           onNavigateTab={handleNavigateTab} 
           activeTab={currentTab}
         />
@@ -453,6 +496,8 @@ export default function App() {
           onAddOpportunity={handleAddOpportunity} 
           challenges={challenges}
           onLaunchChallenge={handleLaunchChallenge}
+          fdpPrograms={fdpPrograms}
+          onHostFdp={handleHostFdp}
           student={student} 
           activeTab={currentTab}
         />

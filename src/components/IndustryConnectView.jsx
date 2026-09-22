@@ -20,6 +20,7 @@ import { initialIndustryConnect } from '../data/mockData';
 import ChallengeSubmissionModal from './ChallengeSubmissionModal';
 
 export default function IndustryConnectView({ currentRole, challenges = [], onApplyOpportunity, addToast }) {
+  const isStudent = currentRole === 'student';
   const [activeSubTab, setActiveSubTab] = useState(currentRole === 'academician' ? 'faculty' : 'mentors');
   const [bookedSessions, setBookedSessions] = useState([]);
   const [selectedMentor, setSelectedMentor] = useState(null);
@@ -27,6 +28,13 @@ export default function IndustryConnectView({ currentRole, challenges = [], onAp
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [selectedChallengeForSubmission, setSelectedChallengeForSubmission] = useState(null);
   const [submittedChallengeIds, setSubmittedChallengeIds] = useState([]);
+
+  // Ensure student cannot get stuck on faculty subtab
+  React.useEffect(() => {
+    if (isStudent && activeSubTab === 'faculty') {
+      setActiveSubTab('mentors');
+    }
+  }, [isStudent, activeSubTab]);
 
   // Merge dynamic challenges with mock challenges
   const activeChallenges = challenges && challenges.length > 0 ? challenges : initialIndustryConnect.challenges;
@@ -76,7 +84,9 @@ export default function IndustryConnectView({ currentRole, challenges = [], onAp
             </span>
           </div>
           <p style={{ fontSize: '13.5px', color: '#64748B', fontWeight: 500 }}>
-            Bridge real-world industry practices with 1:1 mentorships, recruiter-hosted hackathons, and faculty immersion programs.
+            {isStudent
+              ? 'Bridge real-world industry practices with 1:1 expert mentorships and live innovation hackathons.'
+              : 'Bridge real-world industry practices with 1:1 mentorships, recruiter-hosted hackathons, and faculty immersion programs.'}
           </p>
         </div>
 
@@ -130,20 +140,23 @@ export default function IndustryConnectView({ currentRole, challenges = [], onAp
               {activeChallenges.length}
             </span>
           </button>
-          <button
-            onClick={() => setActiveSubTab('faculty')}
-            style={{
-              padding: '8px 18px',
-              borderRadius: '9999px',
-              fontSize: '13px',
-              fontWeight: 700,
-              background: activeSubTab === 'faculty' ? '#2563EB' : 'transparent',
-              color: activeSubTab === 'faculty' ? 'white' : '#64748B',
-              transition: 'all 0.15s ease'
-            }}
-          >
-            Faculty FDP & Research
-          </button>
+
+          {!isStudent && (
+            <button
+              onClick={() => setActiveSubTab('faculty')}
+              style={{
+                padding: '8px 18px',
+                borderRadius: '9999px',
+                fontSize: '13px',
+                fontWeight: 700,
+                background: activeSubTab === 'faculty' ? '#2563EB' : 'transparent',
+                color: activeSubTab === 'faculty' ? 'white' : '#64748B',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              Faculty FDP & Research
+            </button>
+          )}
         </div>
       </div>
 

@@ -18,7 +18,9 @@ import {
 } from 'lucide-react';
 import { initialIndustryConnect } from '../data/mockData';
 
-export default function AcademicianView({ academician, challenges = [], onNavigateTab, activeTab = 'dashboard' }) {
+export default function AcademicianView({ academician, challenges = [], fdpPrograms = [], onNavigateTab, activeTab = 'dashboard' }) {
+  const activeFdps = fdpPrograms && fdpPrograms.length > 0 ? fdpPrograms : initialIndustryConnect.facultyPrograms;
+
   const [currentTab, setCurrentTab] = useState(
     activeTab === 'cohort-monitoring' ? 'cohorts' :
     activeTab === 'faculty-fdp' ? 'fdp' :
@@ -329,7 +331,7 @@ export default function AcademicianView({ academician, challenges = [], onNaviga
       {/* Tab: Faculty FDPs */}
       {currentTab === 'fdp' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {initialIndustryConnect.facultyPrograms.map((prog) => (
+          {activeFdps.map((prog) => (
             <div key={prog.id} className="app-card">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                 <span style={{ background: '#EFF6FF', color: '#2563EB', padding: '4px 12px', borderRadius: '9999px', fontSize: '12px', fontWeight: 800 }}>

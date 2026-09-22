@@ -293,6 +293,65 @@ export const supabaseService = {
   },
 
   /**
+   * 4.2 FACULTY DEVELOPMENT PROGRAMS (FDPs) (Posted by Industry Recruiters)
+   */
+  async getFdpPrograms() {
+    if (!supabase) return { data: initialIndustryConnect.facultyPrograms, source: 'local' };
+    try {
+      const { data, error } = await supabase
+        .from('faculty_fdps')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      if (data && data.length > 0) {
+        const mapped = data.map(f => ({
+          id: f.id,
+          title: f.title,
+          host: f.host,
+          duration: f.duration,
+          dates: f.dates,
+          stipendGrant: f.stipend_grant || f.stipendGrant,
+          seats: f.seats,
+          eligibility: f.eligibility,
+          curriculum: f.curriculum
+        }));
+        return { data: mapped, source: 'supabase' };
+      }
+    } catch (err) {
+      console.warn('Supabase FDP programs fetch note:', err.message);
+    }
+    return { data: initialIndustryConnect.facultyPrograms, source: 'local-fallback' };
+  },
+
+  async postFdpProgram(fdp) {
+    const record = {
+      id: fdp.id || `fdp-${Date.now()}`,
+      title: fdp.title,
+      host: fdp.host,
+      duration: fdp.duration,
+      dates: fdp.dates,
+      stipend_grant: fdp.stipendGrant,
+      seats: fdp.seats,
+      eligibility: fdp.eligibility,
+      curriculum: fdp.curriculum
+    };
+
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from('faculty_fdps').upsert(record).select();
+        if (error) throw error;
+        console.log('⚡ [Supabase Realtime] FDP Program published to DB:', record.title);
+        return { success: true, data: fdp, source: 'supabase' };
+      } catch (err) {
+        console.warn('Supabase FDP post error:', err.message);
+      }
+    }
+
+    return { success: true, data: fdp, source: 'local' };
+  },
+
+  /**
    * 5. AUTHENTICATION & CREDENTIAL MANAGEMENT (Supabase Database Validated)
    */
   async registerUser({
