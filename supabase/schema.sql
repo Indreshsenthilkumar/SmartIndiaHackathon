@@ -7,6 +7,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- 2. CLEAN RESET (Drops existing tables to prevent column mismatch)
+DROP TABLE IF EXISTS public.users CASCADE;
 DROP TABLE IF EXISTS public.applications CASCADE;
 DROP TABLE IF EXISTS public.certifications CASCADE;
 DROP TABLE IF EXISTS public.opportunities CASCADE;
@@ -18,6 +19,19 @@ DROP TABLE IF EXISTS public.institutions CASCADE;
 DROP TABLE IF EXISTS public.mentors CASCADE;
 DROP TABLE IF EXISTS public.challenges CASCADE;
 DROP TABLE IF EXISTS public.faculty_fdps CASCADE;
+
+-- 2.1 USERS & AUTHENTICATION TABLE (Credential Storage & Login Validation)
+CREATE TABLE public.users (
+    id VARCHAR(100) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL, -- 'student' | 'academician' | 'industry' | 'institution'
+    institution_id VARCHAR(100),
+    institution_name VARCHAR(255),
+    metadata JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
 
 -- 3. STUDENTS TABLE (Student Role - Angel K)
 CREATE TABLE public.students (
@@ -189,6 +203,7 @@ CREATE TABLE public.faculty_fdps (
 );
 
 -- 13. ENABLE ROW LEVEL SECURITY & OPEN ACCESS POLICIES
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.opportunities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.applications ENABLE ROW LEVEL SECURITY;
@@ -200,6 +215,7 @@ ALTER TABLE public.mentors ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.challenges ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.faculty_fdps ENABLE ROW LEVEL SECURITY;
 
+CREATE POLICY "Allow All Users" ON public.users FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow All Students" ON public.students FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow All Opportunities" ON public.opportunities FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow All Applications" ON public.applications FOR ALL USING (true) WITH CHECK (true);
@@ -210,6 +226,15 @@ CREATE POLICY "Allow All Institutions" ON public.institutions FOR ALL USING (tru
 CREATE POLICY "Allow All Mentors" ON public.mentors FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow All Challenges" ON public.challenges FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow All FDPs" ON public.faculty_fdps FOR ALL USING (true) WITH CHECK (true);
+
+-- 13.1 SEED USER CREDENTIALS (Pre-populated Accounts for Instant Login)
+INSERT INTO public.users (id, name, email, password_hash, role, institution_name, metadata)
+VALUES
+('usr-student-01', 'Angel K', 'angel.k@annauniv.edu', 'password123', 'student', 'Anna University / College of Engineering, Guindy', '{"degree": "B.Tech in Computer Science & AI", "rollNumber": "2026-CSE-408", "gradYear": "2026"}'::jsonb),
+('usr-acad-01', 'Dr. Rajesh Raman', 'dr.rajesh.raman@annauniv.edu', 'password123', 'academician', 'Anna University / College of Engineering, Guindy', '{"designation": "Professor & Head, AI & Data Systems", "department": "AI & CSE"}'::jsonb),
+('usr-rec-01', 'Priya Sharma', 'priya.sharma@google.com', 'password123', 'industry', 'Google University Relations', '{"company": "Google", "designation": "Lead Talent Acquisition"}'::jsonb),
+('usr-inst-01', 'Anna University Admin', 'admin@annauniv.edu', 'password123', 'institution', 'Anna University / College of Engineering, Guindy', '{"nirfRank": "Rank 8 (Engineering)", "location": "Chennai, Tamil Nadu"}'::jsonb)
+ON CONFLICT (email) DO NOTHING;
 
 -- 14. SEED OPPORTUNITIES DATA
 INSERT INTO public.opportunities (id, title, company, company_category, badge, location, work_mode, stipend, duration, type, match_score, match_label, posted_date, applicants_count, skills, description, eligibility, responsibilities)
@@ -464,6 +489,7 @@ VALUES
 ('fdp-2', 'Industrial Automation, SCADA & Cyber-Physical Systems FDP', 'Larsen & Toubro (L&T)', '4 Weeks', '01 Dec - 28 Dec 2026', '₹ 40,000 Research Grant', '25 Faculty Seats', 'Mechanical, Electrical & Automation Faculty', 'Direct immersion in L&T manufacturing plants, joint DST research project formulation, and student internship pipeline creation.');
 
 -- 24. ENABLE REALTIME BROADCASTING
+ALTER PUBLICATION supabase_realtime ADD TABLE public.users;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.students;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.opportunities;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.applications;

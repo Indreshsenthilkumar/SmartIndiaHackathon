@@ -51,6 +51,56 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function seedDatabase() {
   console.log('🚀 Starting Full Database Push to Supabase:', supabaseUrl);
 
+  // 0. Seed User Credentials (for Login & Auth validation)
+  console.log('\n🔐 0. Pushing User Accounts for Login & Registration Validation...');
+  const defaultUsers = [
+    {
+      id: 'usr-student-01',
+      name: 'Angel K',
+      email: 'angel.k@annauniv.edu',
+      password_hash: 'password123',
+      role: 'student',
+      institution_name: 'Anna University / College of Engineering, Guindy',
+      metadata: { degree: 'B.Tech in Computer Science & AI', rollNumber: '2026-CSE-408', gradYear: '2026' }
+    },
+    {
+      id: 'usr-acad-01',
+      name: 'Dr. Rajesh Raman',
+      email: 'dr.rajesh.raman@annauniv.edu',
+      password_hash: 'password123',
+      role: 'academician',
+      institution_name: 'Anna University / College of Engineering, Guindy',
+      metadata: { designation: 'Professor & Head, AI & Data Systems', department: 'AI & CSE' }
+    },
+    {
+      id: 'usr-rec-01',
+      name: 'Priya Sharma',
+      email: 'priya.sharma@google.com',
+      password_hash: 'password123',
+      role: 'industry',
+      institution_name: 'Google University Relations',
+      metadata: { company: 'Google', designation: 'Lead Talent Acquisition' }
+    },
+    {
+      id: 'usr-inst-01',
+      name: 'Anna University Admin',
+      email: 'admin@annauniv.edu',
+      password_hash: 'password123',
+      role: 'institution',
+      institution_name: 'Anna University / College of Engineering, Guindy',
+      metadata: { nirfRank: 'Rank 8 (Engineering)', location: 'Chennai, Tamil Nadu' }
+    }
+  ];
+
+  for (const u of defaultUsers) {
+    const { error } = await supabase.from('users').upsert(u, { onConflict: 'email' });
+    if (error) {
+      console.warn(`  ⚠️ User ${u.email} note:`, error.message);
+    } else {
+      console.log(`  ✅ User Account synced: ${u.name} (${u.email}) [Role: ${u.role}]`);
+    }
+  }
+
   // 1. Seed Opportunities (All 6 live job vacancies)
   console.log('\n📦 1. Pushing Opportunities...');
   for (const opp of initialOpportunities) {
@@ -71,8 +121,8 @@ async function seedDatabase() {
       applicants_count: opp.applicantsCount,
       skills: opp.requiredSkills,
       description: opp.description,
-      eligibility: [opp.eligibility],
-      perks: opp.responsibilities || []
+      eligibility: opp.eligibility || 'Eligible for all B.Tech / M.Tech batches',
+      responsibilities: opp.responsibilities || []
     };
 
     const { error } = await supabase.from('opportunities').upsert(record, { onConflict: 'id' });
@@ -90,11 +140,9 @@ async function seedDatabase() {
       id: quiz.id,
       title: quiz.title,
       category: quiz.category,
-      duration_minutes: parseInt(quiz.duration) || 15,
-      total_questions: quiz.questionsCount || quiz.questions?.length || 5,
-      passing_score: 70,
-      created_by: 'Industry Partner & Academic Board',
-      proctoring_enabled: true,
+      duration: quiz.duration || '15 mins',
+      questions_count: quiz.questionsCount || quiz.questions?.length || 5,
+      description: quiz.description || 'Skill Assessment Module',
       questions: quiz.questions
     };
 
@@ -109,14 +157,15 @@ async function seedDatabase() {
   // 3. Seed Students & Competency Profiles
   console.log('\n🎓 3. Pushing Student Persona (Angel K)...');
   const studentRecord = {
+    id: 'student-101',
     name: initialStudent.name,
     email: initialStudent.email,
     institution: initialStudent.institution,
-    department: initialStudent.degree,
-    year_of_study: initialStudent.gradYear,
-    cgpa: 8.92,
+    degree: initialStudent.degree,
+    grad_year: initialStudent.gradYear,
     overall_readiness: initialStudent.overallReadiness,
-    skills: initialStudent.skills.map(s => s.name),
+    competency_twin: initialStudent.competencyTwin,
+    skills: initialStudent.skills,
     github_handle: 'angel-k',
     linkedin_url: 'https://linkedin.com/in/angel-k'
   };
@@ -152,25 +201,6 @@ async function seedDatabase() {
       console.warn(`  ⚠️ Application ${app.id} note:`, error.message);
     } else {
       console.log(`  ✅ Application synced: ${app.role} @ ${app.company} (Status: ${app.status})`);
-    }
-  }
-
-  // 5. Seed Certifications
-  console.log('\n📜 5. Pushing Cryptographic Skill Certifications...');
-  for (const cert of initialStudent.certifications) {
-    const certRecord = {
-      id: cert.id,
-      skill_name: cert.title,
-      score: 92,
-      credential_hash: cert.credentialId,
-      issued_at: new Date().toISOString()
-    };
-
-    const { error } = await supabase.from('certifications').upsert(certRecord, { onConflict: 'id' });
-    if (error) {
-      console.warn(`  ⚠️ Certification ${cert.id} note:`, error.message);
-    } else {
-      console.log(`  ✅ Verified Certificate synced: ${cert.title} [${cert.credentialId}]`);
     }
   }
 

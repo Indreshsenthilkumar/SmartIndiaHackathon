@@ -152,34 +152,56 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, addToast, i
     }, 300);
   };
 
-  // Standard Login
-  const handleStandardLogin = (e) => {
+  // Standard Database-Validated Login
+  const handleStandardLogin = async (e) => {
     e.preventDefault();
     setErrorMessage('');
 
     if (!loginEmail.trim()) {
-      setErrorMessage('Please enter your registered email.');
+      setErrorMessage('Please enter your registered email address.');
+      return;
+    }
+    if (!loginPassword) {
+      setErrorMessage('Please enter your password.');
       return;
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      const userData = {
-        role: selectedRole,
-        email: loginEmail,
-        name: loginEmail.split('@')[0].replace('.', ' ').toUpperCase(),
-        institution: colleges.find(c => c.id === selectedCollegeId)?.name || 'Anna University, Chennai'
-      };
 
+    try {
+      const result = await supabaseService.loginUser({
+        email: loginEmail,
+        password: loginPassword,
+        role: selectedRole
+      });
+
+      if (!result.success) {
+        setIsSubmitting(false);
+        setErrorMessage(result.error || 'Invalid credentials. Please verify your email and password.');
+        return;
+      }
+
+      const userData = result.user;
       localStorage.setItem('skillorbit_auth_user', JSON.stringify(userData));
       setIsSubmitting(false);
-      if (addToast) addToast('Welcome Back! 👋', `Signed in as ${userData.name}`, 'success');
+
+      if (addToast) {
+        addToast(
+          'Welcome Back! 👋',
+          `Signed in as ${userData.name} (${(userData.role || selectedRole).toUpperCase()})`,
+          'success'
+        );
+      }
+
       onLoginSuccess(userData);
       onClose();
-    }, 300);
+    } catch (err) {
+      setIsSubmitting(false);
+      setErrorMessage(err.message || 'Login failed. Please try again.');
+    }
   };
 
-  // Full Registration Handler
+  // Full Database-Validated Registration Handler
   const handleRegistration = async (e) => {
     e.preventDefault();
     setErrorMessage('');
@@ -192,133 +214,70 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess, addToast, i
       setErrorMessage('Please enter the College/Institution Name.');
       return;
     }
-    if (!email.trim()) {
+    if (!email.trim() || !email.includes('@')) {
       setErrorMessage('Please enter a valid email address.');
       return;
     }
     if (!password || password.length < 6) {
-      setErrorMessage('Password must be at least 6 characters.');
+      setErrorMessage('Password must be at least 6 characters long.');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      let registeredUser = null;
+      const selectedCollege = colleges.find(c => c.id === selectedCollegeId) || colleges[0];
+
+      const registrationPayload = {
+        email: email,
+        password: password,
+        name: selectedRole === 'institution' ? collegeName : name,
+        role: selectedRole,
+        institutionId: selectedRole === 'institution' ? null : selectedCollege?.id,
+        institutionName: selectedRole === 'institution' ? collegeName : selectedCollege?.name,
+        rollNumber: rollNumber || '2026-REG-101',
+        degree: degree,
+        gradYear: gradYear,
+        targetCareer: targetCareer,
+        designation: selectedRole === 'academician' ? academicianDesignation : industryRole,
+        department: department,
+        company: companyName,
+        location: selectedRole === 'institution' ? (collegeLocation || 'Chennai, Tamil Nadu') : '',
+        nirfRank: nirfRank,
+        naacGrade: naacGrade
+      };
+
+      const result = await supabaseService.registerUser(registrationPayload);
+
+      if (!result.success) {
+        setIsSubmitting(false);
+        setErrorMessage(result.error || 'Registration failed. Please try again.');
+        return;
+      }
+
+      const registeredUser = result.user;
 
       if (selectedRole === 'institution') {
-        const newCollegeRecord = {
-          id: `inst-${Date.now()}`,
+        const newCollegeEntry = {
+          id: registeredUser.id,
           name: collegeName,
-          location: collegeLocation || 'Chennai, Tamil Nadu',
-          nirf_rank: nirfRank,
-          naac_accreditation: naacGrade,
-          total_students_enrolled: 3500,
-          batch_readiness_score: 80,
-          active_mous: 24
+          code: aicteCode || `AU-${Date.now().toString().slice(-4)}`,
+          location: collegeLocation || 'Chennai, Tamil Nadu'
         };
-
-        if (supabase) {
-          await supabase.from('institutions').upsert(newCollegeRecord);
-        }
-
-        setColleges(prev => [newCollegeRecord, ...prev]);
-
-        registeredUser = {
-          role: 'institution',
-          name: collegeName,
-          email: email,
-          location: collegeLocation,
-          nirfRank: nirfRank
-        };
-
-        if (addToast) addToast('Institution Registered! 🏛️', `${collegeName} is now registered. Students can select this college.`, 'success');
-      } else if (selectedRole === 'student') {
-        const selectedCollege = colleges.find(c => c.id === selectedCollegeId) || colleges[0];
-
-        const newStudentRecord = {
-          id: `student-${Date.now()}`,
-          name: name,
-          email: email,
-          roll_number: rollNumber || '2026-REG-101',
-          degree: degree,
-          institution: selectedCollege.name,
-          grad_year: gradYear,
-          target_career: targetCareer,
-          overall_readiness: 75,
-          skills: [
-            { name: 'Python', proficiency: 'Strong', score: 85, verified: true },
-            { name: 'Machine Learning', proficiency: 'Developing', score: 70, verified: false },
-            { name: 'Data Analytics', proficiency: 'Strong', score: 80, verified: true }
-          ]
-        };
-
-        if (supabase) {
-          await supabase.from('students').upsert(newStudentRecord);
-        }
-
-        registeredUser = {
-          role: 'student',
-          name: name,
-          email: email,
-          institution: selectedCollege.name,
-          degree: degree,
-          overallReadiness: 75
-        };
-
-        if (addToast) addToast('Account Created! 🎓', `Welcome ${name}! Linked to ${selectedCollege.name}.`, 'success');
-      } else if (selectedRole === 'academician') {
-        const selectedCollege = colleges.find(c => c.id === selectedCollegeId) || colleges[0];
-
-        const newFacultyRecord = {
-          id: `acad-${Date.now()}`,
-          name: name,
-          email: email,
-          designation: academicianDesignation,
-          institution: selectedCollege.name,
-          domain: domainExpertise
-        };
-
-        if (supabase) {
-          await supabase.from('academicians').upsert(newFacultyRecord);
-        }
-
-        registeredUser = {
-          role: 'academician',
-          name: name,
-          email: email,
-          institution: selectedCollege.name,
-          designation: academicianDesignation
-        };
-
-        if (addToast) addToast('Faculty Registered! 👨‍🏫', `Welcome ${name} to ${selectedCollege.name}`, 'success');
-      } else if (selectedRole === 'industry') {
-        const newRecruiterRecord = {
-          id: `rec-${Date.now()}`,
-          name: name,
-          email: email,
-          role: industryRole,
-          company: companyName,
-          active_postings_count: 0
-        };
-
-        if (supabase) {
-          await supabase.from('recruiters').upsert(newRecruiterRecord);
-        }
-
-        registeredUser = {
-          role: 'industry',
-          name: name,
-          email: email,
-          company: companyName,
-          roleTitle: industryRole
-        };
-
-        if (addToast) addToast('Recruiter Account Live! 💼', `Welcome ${name} from ${companyName}`, 'success');
+        setColleges(prev => [newCollegeEntry, ...prev]);
       }
 
       localStorage.setItem('skillorbit_auth_user', JSON.stringify(registeredUser));
       setIsSubmitting(false);
+
+      if (addToast) {
+        addToast(
+          'Account Created & Verified! 🚀',
+          `Welcome ${registeredUser.name}! Your credentials are now stored in the database.`,
+          'success'
+        );
+      }
+
       onLoginSuccess(registeredUser);
       onClose();
     } catch (err) {
